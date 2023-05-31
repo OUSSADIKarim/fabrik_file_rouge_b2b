@@ -1,7 +1,6 @@
-import dotenv from "dotenv"
-import { verify } from "jsonwebtoken"
+import { createAccessToken, verify } from "../utils/tokenCreation.js"
 import { RefreshToken } from "../models/refreshToken.js"
-import { createAccessToken } from "../middlewares/jwt.js"
+import dotenv from "dotenv"
 
 dotenv.config()
 

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-const { sign, verify } = jwt
+export const { sign, verify } = jwt
 
 export const createAccessToken = (userId) => {
   const accessToken = sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
@@ -21,25 +21,4 @@ export const createConfirmToken = (userId) => {
     expiresIn: "1d",
   })
   return refreshToken
-}
-
-export const verifyAccessToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"]
-  if (!authHeader) {
-    res.sendStatus(401)
-    return
-  }
-  const accessToken = authHeader.split(" ")[1]
-  verify(
-    accessToken,
-    process.env.ACCESS_TOKEN_SECRET,
-    async (error, decodedToken) => {
-      if (error) {
-        next(error)
-        return
-      }
-      req.userId = decodedToken.userId
-      next()
-    }
-  )
 }

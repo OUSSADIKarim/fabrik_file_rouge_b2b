@@ -11,6 +11,7 @@ import swaggerUi from "swagger-ui-express"
 import swaggerJsdoc from "swagger-jsdoc"
 import { accessTokenRouter } from "./routes/accessTokenRoutes.js"
 import { userRouter } from "./routes/userRoutes.js"
+import { authRouter } from "./routes/auth.js"
 
 const app = express()
 
@@ -38,6 +39,7 @@ app.use(cookieParser())
 app.use(upload.single("logo"))
 app.use(cors())
 
+app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)
 app.use("/api/users", userRouter)
 app.use("/api/accessToken", accessTokenRouter)

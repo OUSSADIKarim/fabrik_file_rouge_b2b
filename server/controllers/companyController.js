@@ -6,16 +6,15 @@ import {
   sendTeamMemberConfirmationEmail,
 } from "../utils/nodemailer.js"
 import bcrypt from "bcrypt"
+import { RefreshToken } from "../models/refreshToken.js"
+import { ConfirmationToken } from "../models/confirmationToken.js"
+import { User } from "../models/User.js"
+import { generateRandomPassword } from "./../utils/generateRandomPassword.js"
 import {
   createAccessToken,
   createConfirmToken,
   createRefreshToken,
-} from "../middlewares/jwt.js"
-import { RefreshToken } from "../models/refreshToken.js"
-import { ConfirmationToken } from "../models/confirmationToken.js"
-import { verify } from "jsonwebtoken"
-import { User } from "../models/User.js"
-import { generateRandomPassword } from "./../utils/generateRandomPassword.js"
+} from "../utils/tokenCreation.js"
 
 export const companyLogin = async (req, res, next) => {
   const { email, password } = req.body

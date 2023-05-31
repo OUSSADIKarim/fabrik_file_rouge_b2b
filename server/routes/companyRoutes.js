@@ -60,7 +60,6 @@ import express from "express"
 import {
   createCompany,
   getComapanies,
-  companyLogin,
   confirmCompany,
   addTeamMember,
 } from "../controllers/companyController.js"
@@ -68,7 +67,6 @@ import { verifyAccessToken } from "../middlewares/jwt.js"
 
 export const companyRouter = express.Router()
 
-companyRouter.post("/login", companyLogin)
 companyRouter.get("/", verifyAccessToken, getComapanies)
 companyRouter.post("/", createCompany)
 companyRouter.post("/addTeamMember", verifyAccessToken, addTeamMember)
