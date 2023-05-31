@@ -9,7 +9,7 @@ import { erroHandler } from "./middlewares/errorHandler.js"
 
 import swaggerUi from "swagger-ui-express"
 import swaggerJsdoc from "swagger-jsdoc"
-import { accessTokenRouter } from "./routes/accessTokenRoutes.js"
+import { refreshTokenRouter } from "./routes/refreshTokenRoutes.js"
 import { userRouter } from "./routes/userRoutes.js"
 import { authRouter } from "./routes/auth.js"
 
@@ -42,7 +42,7 @@ app.use(cors())
 app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)
 app.use("/api/users", userRouter)
-app.use("/api/accessToken", accessTokenRouter)
+app.use("/api/accessToken", refreshTokenRouter)
 
 // swagger
 
