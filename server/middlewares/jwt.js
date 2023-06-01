@@ -1,3 +1,5 @@
+import { verify } from "../utils/tokenCreation.js"
+
 export const verifyAccessToken = (req, res, next) => {
   const authHeader = req.headers["authorization"]
   if (!authHeader) {

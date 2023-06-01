@@ -26,7 +26,7 @@ export const sendCompanyConfirmationEmail = async (to, confirmToken) => {
       <p>
         Thanks for your join with us. Please click the button below to confirm and login.
       </p> 					
-      <a href="${process.env.BASEURL}${process.env.PORT}/api/companies/confirm/${confirmToken}">
+      <a href="${process.env.BASEURL}${process.env.PORT}/api/companies/confirmCompany/${confirmToken}">
         Confirm registration
       </a>
       `,

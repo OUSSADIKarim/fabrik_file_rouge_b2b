@@ -130,7 +130,7 @@ const companySchema = new Schema(
     teamMembers: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Employee",
         unique: true,
       },
     ],

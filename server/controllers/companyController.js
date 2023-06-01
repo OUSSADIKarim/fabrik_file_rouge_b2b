@@ -8,7 +8,7 @@ import {
 import bcrypt from "bcrypt"
 import { RefreshToken } from "../models/refreshToken.js"
 import { ConfirmationToken } from "../models/confirmationToken.js"
-import { User } from "../models/User.js"
+import { Employee } from "../models/Employee.js"
 import { generateRandomPassword } from "./../utils/generateRandomPassword.js"
 import {
   createAccessToken,
@@ -33,6 +33,7 @@ export const companyLogin = async (req, res, next) => {
     const refreshToken = createRefreshToken(company._id)
     await RefreshToken.create({
       userId: company._id,
+      userModel: "Company",
       refreshToken,
     })
     res.cookie(
@@ -139,8 +140,9 @@ export const createCompany = async (req, res, next) => {
     await newCompany.save()
     const confirmToken = createConfirmToken(newCompany._id)
     await ConfirmationToken.create({
-      confirmationToken: confirmToken,
       userId: newCompany._id,
+      userModel: "Company",
+      confirmationToken: confirmToken,
     })
     await sendCompanyConfirmationEmail(newCompany.email, confirmToken)
     res.status(200).json(newCompany)
@@ -195,7 +197,7 @@ export const addTeamMember = async (req, res, next) => {
   const { firstName, lastName, email, phoneNumber } = req.body
   const randomPassword = generateRandomPassword()
   try {
-    const newUser = await User.create({
+    const newEmployee = await Employee.create({
       firstName,
       lastName,
       email,
@@ -204,12 +206,13 @@ export const addTeamMember = async (req, res, next) => {
       company: companyId,
     })
     const company = await Company.findById(companyId)
-    company.teamMembers.push(newUser._id)
+    company.teamMembers.push(newEmployee._id)
     await company.save()
-    const confirmToken = createConfirmToken(newUser._id)
+    const confirmToken = createConfirmToken(newEmployee._id)
     await ConfirmationToken.create({
+      userId: newEmployee._id,
+      userModel: "Employee",
       confirmationToken: confirmToken,
-      userId: newUser._id,
     })
     await sendTeamMemberConfirmationEmail(
       email,

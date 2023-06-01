@@ -10,8 +10,8 @@ import { erroHandler } from "./middlewares/errorHandler.js"
 import swaggerUi from "swagger-ui-express"
 import swaggerJsdoc from "swagger-jsdoc"
 import { refreshTokenRouter } from "./routes/refreshTokenRoutes.js"
-import { userRouter } from "./routes/userRoutes.js"
-import { authRouter } from "./routes/auth.js"
+import { employeeRouter } from "./routes/employeeRoutes.js"
+import { authRouter } from "./routes/authRoutes.js"
 
 const app = express()
 
@@ -41,7 +41,7 @@ app.use(cors())
 
 app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)
-app.use("/api/users", userRouter)
+app.use("/api/employees", employeeRouter)
 app.use("/api/accessToken", refreshTokenRouter)
 
 // swagger

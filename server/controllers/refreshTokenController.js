@@ -25,13 +25,13 @@ export const generateRefreshToken = async (req, res, next) => {
       return result
     }
   )
-  if (!decodedRefreshToken || decodedRefreshToken?.error) {
-    await RefreshToken.findOneAndDelete({ refreshToken })
-    res.clearCookie("refreshToken")
-    res.sendStatus(403)
-    return
-  }
   try {
+    if (!decodedRefreshToken || decodedRefreshToken?.error) {
+      await RefreshToken.findOneAndDelete({ refreshToken })
+      res.clearCookie("refreshToken")
+      res.sendStatus(403)
+      return
+    }
     const refreshTokenDB = await RefreshToken.findOne({ refreshToken })
     if (!refreshTokenDB) {
       res.sendStatus(403)

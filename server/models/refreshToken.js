@@ -4,13 +4,21 @@ const Schema = mongoose.Schema
 
 const refreshTokenSchema = new Schema({
   userId: {
+    type: Schema.Types.ObjectId,
+    refPath: "userModel",
+    required: true,
+  },
+
+  userModel: {
     type: String,
-    unique: true,
+    enum: ["Company", "Employee"],
+    required: true,
   },
 
   refreshToken: {
     type: String,
     unique: true,
+    required: true,
   },
 })
 

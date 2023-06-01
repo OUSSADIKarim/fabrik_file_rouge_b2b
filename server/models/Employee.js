@@ -8,11 +8,11 @@ import { hashPassword } from "../utils/hashPassword.js"
 
 const Schema = mongoose.Schema
 
-const userSchema = new Schema(
+const employeeSchema = new Schema(
   {
     role: {
       type: String,
-      enum: ["admin", "user"],
+      enum: ["admin", "employee"],
       default: "user",
       required: true,
     },
@@ -77,7 +77,7 @@ const userSchema = new Schema(
   { timestamps: true }
 )
 
-userSchema.pre("save", async function (next) {
+employeeSchema.pre("save", async function (next) {
   try {
     const hashedPassword = await hashPassword(this.password)
     this.password = hashedPassword
@@ -87,4 +87,4 @@ userSchema.pre("save", async function (next) {
   }
 })
 
-export const User = mongoose.model("User", userSchema)
+export const Employee = mongoose.model("Employee", employeeSchema)
