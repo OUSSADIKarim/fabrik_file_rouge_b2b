@@ -29,3 +29,12 @@ export const cloudinaryLogoUploader = async (logo) => {
     throw createError(500, error)
   }
 }
+
+export const cloudinaryLogoRemover = async (publicId) => {
+  try {
+    const result = cloudinary.uploader.destroy(publicId)
+    return result
+  } catch (error) {
+    throw createError(500, error)
+  }
+}

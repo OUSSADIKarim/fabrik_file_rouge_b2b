@@ -1,13 +1,16 @@
 import { Company } from "../models/Company.js"
 import { createError } from "../utils/createError.js"
-import { cloudinaryLogoUploader } from "../utils/cloudinary.js"
+import {
+  cloudinaryLogoRemover,
+  cloudinaryLogoUploader,
+} from "../utils/cloudinary.js"
 import {
   sendCompanyConfirmationEmail,
   sendTeamMemberConfirmationEmail,
 } from "../utils/nodemailer.js"
 import bcrypt from "bcrypt"
-import { RefreshToken } from "../models/refreshToken.js"
-import { ConfirmationToken } from "../models/confirmationToken.js"
+import { RefreshToken } from "../models/RefreshToken.js"
+import { ConfirmationToken } from "../models/ConfirmationToken.js"
 import { Employee } from "../models/Employee.js"
 import { generateRandomPassword } from "./../utils/generateRandomPassword.js"
 import {
@@ -15,62 +18,7 @@ import {
   createConfirmToken,
   createRefreshToken,
 } from "../utils/tokenCreation.js"
-
-export const companyLogin = async (req, res, next) => {
-  const { email, password } = req.body
-  try {
-    const company = await Company.findOne({ email })
-    if (!company) {
-      res.status(400).json("incorrect credentials")
-      return
-    }
-    const passwordCompare = await bcrypt.compare(password, company.password)
-    if (!passwordCompare) {
-      res.status(400).json("incorrect credentials")
-      return
-    }
-    const accessToken = createAccessToken(company._id)
-    const refreshToken = createRefreshToken(company._id)
-    await RefreshToken.create({
-      userId: company._id,
-      userModel: "Company",
-      refreshToken,
-    })
-    res.cookie(
-      "refreshToken",
-      { refreshToken },
-      {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 60 * 60 * 24 * 1000 * 7, //7days
-      }
-    )
-    res.status(200).json({
-      company: {
-        companyId: company._id,
-        name: company.name,
-        companySize: company.companySize,
-        employeesNumber: company.employeesNumber,
-        legalStatus: company.legalStatus,
-        socialCapital: company.socialCapital,
-        headquarter: company.headquarter,
-        website: company.headquarter,
-        description: company.description,
-        email: company.email,
-        phoneNumber: company.phoneNumber,
-        nrc: company.nrc,
-        nif: company.nif,
-        businessSectors: company.businessSectors,
-        logoURL: company.logoURL,
-        actif: company.actif,
-      },
-      accessToken,
-    })
-  } catch (error) {
-    next(error)
-  }
-}
+import { Roles } from "../models/Role.js"
 
 export const createCompany = async (req, res, next) => {
   const logo = req.file
@@ -151,15 +99,6 @@ export const createCompany = async (req, res, next) => {
   }
 }
 
-export const getComapanies = async (req, res, next) => {
-  try {
-    const companies = await Company.find()
-    res.status(200).json(companies)
-  } catch (error) {
-    next(error)
-  }
-}
-
 export const confirmCompany = async (req, res, next) => {
   const confirmationToken = req.params.confirmationToken
   if (!confirmationToken) {
@@ -187,6 +126,141 @@ export const confirmCompany = async (req, res, next) => {
     })
     await confirmationTokenDB.deleteOne()
     res.status(200).json("Registration confirmed")
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const companyLogin = async (req, res, next) => {
+  const { email, password } = req.body
+  try {
+    const company = await Company.findOne({ email })
+    if (!company) {
+      res.status(400).json("incorrect credentials")
+      return
+    }
+    const passwordCompare = await bcrypt.compare(password, company.password)
+    if (!passwordCompare) {
+      res.status(400).json("incorrect credentials")
+      return
+    }
+    const accessToken = createAccessToken(company._id)
+    const refreshToken = createRefreshToken(company._id)
+    await RefreshToken.create({
+      userId: company._id,
+      userModel: "Company",
+      refreshToken,
+    })
+    res.cookie(
+      "refreshToken",
+      { refreshToken },
+      {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 60 * 60 * 24 * 1000 * 7, //7days
+      }
+    )
+    res.status(200).json({
+      company: {
+        companyId: company._id,
+        name: company.name,
+        companySize: company.companySize,
+        employeesNumber: company.employeesNumber,
+        legalStatus: company.legalStatus,
+        socialCapital: company.socialCapital,
+        headquarter: company.headquarter,
+        website: company.headquarter,
+        description: company.description,
+        email: company.email,
+        phoneNumber: company.phoneNumber,
+        nrc: company.nrc,
+        nif: company.nif,
+        businessSectors: company.businessSectors,
+        logoURL: company.logoURL,
+        actif: company.actif,
+      },
+      accessToken,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getComapanies = async (req, res, next) => {
+  try {
+    const companies = await Company.find()
+    res.status(200).json(companies)
+  } catch (error) {
+    next(error)
+  }
+}
+export const getComapany = async (req, res, next) => {
+  const companyId = req.params.companyId
+  try {
+    const company = await Company.findById(companyId)
+    res.status(200).json(company)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const deleteCompany = async (req, res, next) => {
+  const companyId = req.query.companyId
+  try {
+    await Company.findByIdAndDelete(companyId)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const removeCompanyLogo = async (req, res, next) => {
+  const companyId = req.userId
+  try {
+    const company = await Company.findById(companyId)
+    const publicId = company.publicId
+    await cloudinaryLogoRemover(publicId)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const updateCompanyDetails = async (req, res, next) => {
+  const logo = req.file
+  const {
+    name,
+    companySize,
+    employeesNumber,
+    legalStatus,
+    socialCapital,
+    headquarter,
+    website,
+    description,
+    phoneNumber,
+    businessSectors,
+  } = req.body
+
+  try {
+    const logoUploade = await cloudinaryLogoUploader(logo)
+    const company = await Company.findById(req.userId)
+    company.name = name
+    company.companySize = companySize
+    company.employeesNumber = employeesNumber
+    company.legalStatus = legalStatus
+    company.socialCapital = socialCapital
+    company.headquarter = headquarter
+    company.website = website
+    company.description = description
+    company.phoneNumber = phoneNumber
+    company.logoURL = {
+      publicId: logoUploade.public_id,
+      url: logoUploade.url,
+    }
+    JSON.parse(businessSectors).forEach((sector) => {
+      company.businessSectors.push(sector)
+    })
+    await company.save()
+    res.status(200).json(company)
   } catch (error) {
     next(error)
   }
@@ -221,6 +295,21 @@ export const addTeamMember = async (req, res, next) => {
       randomPassword
     )
     res.status(200).json("team member added")
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const removeTeamMember = async (req, res, next) => {
+  const companyId = req.userId
+  const employeeId = req.query.employeeId
+  try {
+    await Employee.findByIdAndDelete(employeeId)
+    const company = await Company.findById(companyId)
+    indexOfTeamMemebr = company.teamMembers.indexOf(employeeId)
+    company.teamMembers.splice(indexOfTeamMemebr, 1)
+    await company.save()
+    res.status(200).json(company)
   } catch (error) {
     next(error)
   }

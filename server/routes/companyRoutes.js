@@ -62,12 +62,22 @@ import {
   getComapanies,
   confirmCompany,
   addTeamMember,
+  removeCompanyLogo,
+  getComapany,
+  deleteCompany,
+  updateCompanyDetails,
+  removeTeamMember,
 } from "../controllers/companyController.js"
 import { verifyAccessToken } from "../middlewares/jwt.js"
 
 export const companyRouter = express.Router()
 
-companyRouter.get("/", verifyAccessToken, getComapanies)
 companyRouter.post("/", createCompany)
-companyRouter.post("/addTeamMember", verifyAccessToken, addTeamMember)
+companyRouter.get("/", verifyAccessToken, getComapanies)
+companyRouter.get("/:companyId", verifyAccessToken, getComapany)
 companyRouter.get("/confirmCompany/:confirmationToken", confirmCompany)
+companyRouter.delete("/", verifyAccessToken, deleteCompany)
+companyRouter.put("/", verifyAccessToken, updateCompanyDetails)
+companyRouter.delete("/removeLogo", verifyAccessToken, removeCompanyLogo)
+companyRouter.post("/addTeamMember", verifyAccessToken, addTeamMember)
+companyRouter.delete("/removeTeamMember", verifyAccessToken, removeTeamMember)

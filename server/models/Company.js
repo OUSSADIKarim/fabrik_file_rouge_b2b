@@ -8,6 +8,11 @@ import {
   isURL,
 } from "../utils/validators.js"
 import { hashPassword } from "../utils/hashPassword.js"
+import { Employee } from "./Employee.js"
+import { RefreshToken } from "./RefreshToken.js"
+import { ConfirmationToken } from "./ConfirmationToken.js"
+import { Roles } from "./Role.js"
+import { cloudinaryLogoRemover } from "../utils/cloudinary.js"
 
 const Schema = mongoose.Schema
 
@@ -143,6 +148,19 @@ companySchema.pre("save", async function (next) {
   try {
     const hashedPassword = await hashPassword(this.password)
     this.password = hashedPassword
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
+
+companySchema.pre("deleteOne", async function (next) {
+  try {
+    await cloudinaryLogoRemover(this.logoURL.publicId)
+    await Employee.deleteMany({ company: this._id })
+    await Roles.deleteMany({ company: this._id })
+    await RefreshToken.deleteMany({ userId: this._id })
+    await ConfirmationToken.deleteMany({ userId: this._id })
     next()
   } catch (error) {
     next(error)

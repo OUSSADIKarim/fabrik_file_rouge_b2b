@@ -5,6 +5,8 @@ import {
   isStrongPassword,
 } from "../utils/validators.js"
 import { hashPassword } from "../utils/hashPassword.js"
+import { RefreshToken } from "./RefreshToken.js"
+import { ConfirmationToken } from "./ConfirmationToken.js"
 
 const Schema = mongoose.Schema
 
@@ -81,6 +83,16 @@ employeeSchema.pre("save", async function (next) {
   try {
     const hashedPassword = await hashPassword(this.password)
     this.password = hashedPassword
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
+
+employeeSchema.pre("deleteMany deleteOne", async function (next) {
+  try {
+    await RefreshToken.deleteMany({ userId: this._id })
+    await ConfirmationToken.deleteMany({ userId: this._id })
     next()
   } catch (error) {
     next(error)
