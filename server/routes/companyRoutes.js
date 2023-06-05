@@ -74,7 +74,7 @@ import { checkIfActif } from "../middlewares/checkIfActif.js"
 
 export const companyRouter = express.Router()
 
-companyRouter.post("/", checkIfActif, createCompany)
+companyRouter.post("/", createCompany)
 companyRouter.get("/", verifyAccessToken, getComapanies)
 companyRouter.get("/:companyId", verifyAccessToken, getComapany)
 companyRouter.get("/confirmCompany/:confirmationToken", confirmCompany)

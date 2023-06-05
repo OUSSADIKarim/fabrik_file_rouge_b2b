@@ -86,11 +86,7 @@ export const createCompany = async (req, res, next) => {
     })
 
     await newCompany.save()
-    const confirmToken = createConfirmToken(
-      newCompany._id,
-      "company",
-      newCompany.actif
-    )
+    const confirmToken = createConfirmToken(newCompany._id, "company")
     await ConfirmationToken.create({
       userId: newCompany._id,
       userModel: "Company",
@@ -148,12 +144,8 @@ export const companyLogin = async (req, res, next) => {
       res.status(400).json("incorrect credentials")
       return
     }
-    const accessToken = createAccessToken(company._id, "company", company.actif)
-    const refreshToken = createRefreshToken(
-      company._id,
-      "company",
-      company.actif
-    )
+    const accessToken = createAccessToken(company._id, "company")
+    const refreshToken = createRefreshToken(company._id, "company")
     await RefreshToken.create({
       userId: company._id,
       userModel: "Company",
@@ -342,11 +334,7 @@ export const addTeamMember = async (req, res, next) => {
     const company = await Company.findById(companyId)
     company.teamMembers.push(newEmployee._id)
     await company.save()
-    const confirmToken = createConfirmToken(
-      newEmployee._id,
-      "employee",
-      newEmployee.actif
-    )
+    const confirmToken = createConfirmToken(newEmployee._id, "employee")
     await ConfirmationToken.create({
       userId: newEmployee._id,
       userModel: "Employee",

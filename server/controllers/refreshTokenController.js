@@ -44,16 +44,14 @@ export const generateRefreshToken = async (req, res, next) => {
     if (decodedRefreshToken.userType === "company") {
       const newAccessToken = createAccessToken(
         decodedRefreshToken.userId,
-        "company",
-        decodedRefreshToken.actif
+        "company"
       )
       res.status(200).json({ accessToken: newAccessToken })
       return
     }
     const newAccessToken = createAccessToken(
       decodedRefreshToken.userId,
-      "employee",
-      decodedRefreshToken.actif
+      "employee"
     )
     res.status(200).json({ accessToken: newAccessToken })
   } catch (error) {

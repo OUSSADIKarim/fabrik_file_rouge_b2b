@@ -53,16 +53,8 @@ export const employeeLogin = async (req, res, next) => {
       res.status(400).json("incorrect credentials")
       return
     }
-    const accessToken = createAccessToken(
-      employee._id,
-      "employee",
-      employee.actif
-    )
-    const refreshToken = createRefreshToken(
-      employee._id,
-      "employee",
-      employee.actif
-    )
+    const accessToken = createAccessToken(employee._id, "employee")
+    const refreshToken = createRefreshToken(employee._id, "employee")
     await RefreshToken.create({
       userId: employee._id,
       userModel: "Employee",
