@@ -3,4 +3,4 @@ import { confirmEmployee } from "../controllers/employeeControllers.js"
 
 export const employeeRouter = express.Router()
 
-userRouter.get("/confirm/:confirmationToken", confirmEmployee)
+employeeRouter.get("/confirm/:confirmationToken", confirmEmployee)

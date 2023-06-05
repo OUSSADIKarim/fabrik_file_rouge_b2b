@@ -16,6 +16,8 @@ export const verifyAccessToken = (req, res, next) => {
         return
       }
       req.userId = decodedToken.userId
+      req.userType = decodedToken.userType
+      req.actif = decodedToken.actif
       next()
     }
   )

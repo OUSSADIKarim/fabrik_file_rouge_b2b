@@ -67,17 +67,30 @@ import {
   deleteCompany,
   updateCompanyDetails,
   removeTeamMember,
+  addCompanyLogo,
 } from "../controllers/companyController.js"
 import { verifyAccessToken } from "../middlewares/jwt.js"
+import { checkIfActif } from "../middlewares/checkIfActif.js"
 
 export const companyRouter = express.Router()
 
-companyRouter.post("/", createCompany)
+companyRouter.post("/", checkIfActif, createCompany)
 companyRouter.get("/", verifyAccessToken, getComapanies)
 companyRouter.get("/:companyId", verifyAccessToken, getComapany)
 companyRouter.get("/confirmCompany/:confirmationToken", confirmCompany)
 companyRouter.delete("/", verifyAccessToken, deleteCompany)
 companyRouter.put("/", verifyAccessToken, updateCompanyDetails)
+companyRouter.post("/addLogo", verifyAccessToken, addCompanyLogo)
 companyRouter.delete("/removeLogo", verifyAccessToken, removeCompanyLogo)
-companyRouter.post("/addTeamMember", verifyAccessToken, addTeamMember)
-companyRouter.delete("/removeTeamMember", verifyAccessToken, removeTeamMember)
+companyRouter.post(
+  "/addTeamMember",
+  verifyAccessToken,
+  checkIfActif,
+  addTeamMember
+)
+companyRouter.delete(
+  "/removeTeamMember",
+  verifyAccessToken,
+  checkIfActif,
+  removeTeamMember
+)

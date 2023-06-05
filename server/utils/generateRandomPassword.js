@@ -8,5 +8,6 @@ export const generateRandomPassword = () => {
     numbers: true,
     symbols: true,
   })
+  console.log(randomPassword)
   return randomPassword
 }

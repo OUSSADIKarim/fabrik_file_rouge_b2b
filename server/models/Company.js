@@ -113,7 +113,6 @@ const companySchema = new Schema(
     logoURL: {
       publicId: {
         type: String,
-        required: true,
       },
       url: {
         type: String,
@@ -121,7 +120,6 @@ const companySchema = new Schema(
           validator: isURL,
           message: "invalid URL",
         },
-        required: true,
       },
     },
 
@@ -145,19 +143,28 @@ const companySchema = new Schema(
 )
 
 companySchema.pre("save", async function (next) {
-  try {
-    const hashedPassword = await hashPassword(this.password)
-    this.password = hashedPassword
-    next()
-  } catch (error) {
-    next(error)
+  if (this.isNew) {
+    try {
+      const hashedPassword = await hashPassword(this.password)
+      this.password = hashedPassword
+      next()
+    } catch (error) {
+      next(error)
+    }
   }
 })
 
-companySchema.pre("deleteOne", async function (next) {
+companySchema.pre("deleteOne", { document: true }, async function (next) {
   try {
     await cloudinaryLogoRemover(this.logoURL.publicId)
-    await Employee.deleteMany({ company: this._id })
+    const employees = await Employee.find({ company: this._id })
+    employees.map(async (employee) => {
+      try {
+        await employee.deleteOne()
+      } catch (error) {
+        return error
+      }
+    })
     await Roles.deleteMany({ company: this._id })
     await RefreshToken.deleteMany({ userId: this._id })
     await ConfirmationToken.deleteMany({ userId: this._id })

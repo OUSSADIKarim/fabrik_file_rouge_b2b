@@ -60,7 +60,7 @@ export const sendTeamMemberConfirmationEmail = async (
         Password: ${randomPassword}
       </p> 	
       				
-      <a href="${process.env.BASEURL}${process.env.PORT}/api/users/confirm/${confirmToken}">
+      <a href="${process.env.BASEURL}${process.env.PORT}/api/employees/confirm/${confirmToken}">
         Confirm registration
       </a>
       `,

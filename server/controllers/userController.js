@@ -1,4 +1,4 @@
-import { RefreshToken } from "../models/refreshToken.js"
+import { RefreshToken } from "../models/RefreshToken.js"
 
 export const userLogout = async (req, res, next) => {
   const refreshCookie = req.cookies["refreshToken"]

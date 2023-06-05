@@ -17,8 +17,8 @@ import {
   createAccessToken,
   createConfirmToken,
   createRefreshToken,
+  verify,
 } from "../utils/tokenCreation.js"
-import { Roles } from "../models/Role.js"
 
 export const createCompany = async (req, res, next) => {
   const logo = req.file
@@ -86,7 +86,11 @@ export const createCompany = async (req, res, next) => {
     })
 
     await newCompany.save()
-    const confirmToken = createConfirmToken(newCompany._id)
+    const confirmToken = createConfirmToken(
+      newCompany._id,
+      "company",
+      newCompany.actif
+    )
     await ConfirmationToken.create({
       userId: newCompany._id,
       userModel: "Company",
@@ -144,8 +148,12 @@ export const companyLogin = async (req, res, next) => {
       res.status(400).json("incorrect credentials")
       return
     }
-    const accessToken = createAccessToken(company._id)
-    const refreshToken = createRefreshToken(company._id)
+    const accessToken = createAccessToken(company._id, "company", company.actif)
+    const refreshToken = createRefreshToken(
+      company._id,
+      "company",
+      company.actif
+    )
     await RefreshToken.create({
       userId: company._id,
       userModel: "Company",
@@ -206,27 +214,78 @@ export const getComapany = async (req, res, next) => {
 }
 
 export const deleteCompany = async (req, res, next) => {
-  const companyId = req.query.companyId
+  if (req.userType !== "company") {
+    res.sendStatus(403)
+    return
+  }
+  const companyId = req.userId
   try {
-    await Company.findByIdAndDelete(companyId)
+    const company = await Company.findById(companyId)
+    await company.deleteOne()
+    res.status(200).json("deleted")
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const addCompanyLogo = async (req, res, next) => {
+  let companyId
+  if (req.userType === "employee") {
+    const employee = await Employee.findById(req.userId)
+    companyId = employee.company
+  } else {
+    companyId = req.userId
+  }
+  const logo = req.file
+  try {
+    const logoUploade = await cloudinaryLogoUploader(logo)
+    const company = await Company.findById(companyId)
+    company.logoURL = {
+      publicId: logoUploade.public_id,
+      url: logoUploade.url,
+    }
+    await company.save()
+    res.status(200).json(company)
   } catch (error) {
     next(error)
   }
 }
 
 export const removeCompanyLogo = async (req, res, next) => {
-  const companyId = req.userId
+  let companyId
+  if (req.userType === "employee") {
+    const employee = await Employee.findById(req.userId)
+    companyId = employee.company
+  } else {
+    companyId = req.userId
+  }
   try {
     const company = await Company.findById(companyId)
-    const publicId = company.publicId
+    const publicId = company.logoURL.publicId
+    if (publicId === "") {
+      res.status(400).json("no logo found")
+      return
+    }
     await cloudinaryLogoRemover(publicId)
+    company.logoURL = {
+      publicId: "",
+      url: "",
+    }
+    company.save({ validateBeforeSave: false })
+    res.sendStatus(200)
   } catch (error) {
     next(error)
   }
 }
 
 export const updateCompanyDetails = async (req, res, next) => {
-  const logo = req.file
+  let companyId
+  if (req.userType === "employee") {
+    const employee = await Employee.findById(req.userId)
+    companyId = employee.company
+  } else {
+    companyId = req.userId
+  }
   const {
     name,
     companySize,
@@ -241,8 +300,7 @@ export const updateCompanyDetails = async (req, res, next) => {
   } = req.body
 
   try {
-    const logoUploade = await cloudinaryLogoUploader(logo)
-    const company = await Company.findById(req.userId)
+    const company = await Company.findById(companyId)
     company.name = name
     company.companySize = companySize
     company.employeesNumber = employeesNumber
@@ -252,14 +310,11 @@ export const updateCompanyDetails = async (req, res, next) => {
     company.website = website
     company.description = description
     company.phoneNumber = phoneNumber
-    company.logoURL = {
-      publicId: logoUploade.public_id,
-      url: logoUploade.url,
-    }
-    JSON.parse(businessSectors).forEach((sector) => {
+    company.businessSectors = []
+    businessSectors.forEach((sector) => {
       company.businessSectors.push(sector)
     })
-    await company.save()
+    await company.save({ validateModifiedOnly: true })
     res.status(200).json(company)
   } catch (error) {
     next(error)
@@ -267,6 +322,10 @@ export const updateCompanyDetails = async (req, res, next) => {
 }
 
 export const addTeamMember = async (req, res, next) => {
+  if (req.userType !== "company") {
+    res.sendStatus(403)
+    return
+  }
   const companyId = req.userId
   const { firstName, lastName, email, phoneNumber } = req.body
   const randomPassword = generateRandomPassword()
@@ -278,11 +337,16 @@ export const addTeamMember = async (req, res, next) => {
       phoneNumber,
       password: randomPassword,
       company: companyId,
+      role: "employee",
     })
     const company = await Company.findById(companyId)
     company.teamMembers.push(newEmployee._id)
     await company.save()
-    const confirmToken = createConfirmToken(newEmployee._id)
+    const confirmToken = createConfirmToken(
+      newEmployee._id,
+      "employee",
+      newEmployee.actif
+    )
     await ConfirmationToken.create({
       userId: newEmployee._id,
       userModel: "Employee",
@@ -301,12 +365,18 @@ export const addTeamMember = async (req, res, next) => {
 }
 
 export const removeTeamMember = async (req, res, next) => {
+  if (req.userType !== "company") {
+    res.sendStatus(403)
+    return
+  }
   const companyId = req.userId
   const employeeId = req.query.employeeId
   try {
     await Employee.findByIdAndDelete(employeeId)
     const company = await Company.findById(companyId)
-    indexOfTeamMemebr = company.teamMembers.indexOf(employeeId)
+    const indexOfTeamMemebr = company.teamMembers.indexOf(
+      `new ObjectId(${employeeId})`
+    )
     company.teamMembers.splice(indexOfTeamMemebr, 1)
     await company.save()
     res.status(200).json(company)

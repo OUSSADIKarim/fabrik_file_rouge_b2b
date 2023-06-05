@@ -1,5 +1,5 @@
 import { createAccessToken, verify } from "../utils/tokenCreation.js"
-import { RefreshToken } from "../models/refreshToken.js"
+import { RefreshToken } from "../models/RefreshToken.js"
 import dotenv from "dotenv"
 
 dotenv.config()
@@ -37,11 +37,24 @@ export const generateRefreshToken = async (req, res, next) => {
       res.sendStatus(403)
       return
     }
-    if (decodedRefreshToken.userId !== refreshTokenDB.userId) {
+    if (decodedRefreshToken.userId !== refreshTokenDB.userId.toString()) {
       res.sendStatus(403)
       return
     }
-    const newAccessToken = createAccessToken(decodedRefreshToken.userId)
+    if (decodedRefreshToken.userType === "company") {
+      const newAccessToken = createAccessToken(
+        decodedRefreshToken.userId,
+        "company",
+        decodedRefreshToken.actif
+      )
+      res.status(200).json({ accessToken: newAccessToken })
+      return
+    }
+    const newAccessToken = createAccessToken(
+      decodedRefreshToken.userId,
+      "employee",
+      decodedRefreshToken.actif
+    )
     res.status(200).json({ accessToken: newAccessToken })
   } catch (error) {
     next(error)

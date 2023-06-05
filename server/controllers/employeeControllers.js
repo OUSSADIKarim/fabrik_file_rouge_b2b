@@ -1,6 +1,7 @@
 import { Employee } from "../models/Employee.js"
-import { ConfirmationToken } from "../models/confirmationToken.js"
-import { RefreshToken } from "../models/refreshToken.js"
+import { ConfirmationToken } from "../models/ConfirmationToken.js"
+import { RefreshToken } from "../models/RefreshToken.js"
+import bcrypt from "bcrypt"
 import {
   createAccessToken,
   createRefreshToken,
@@ -52,8 +53,16 @@ export const employeeLogin = async (req, res, next) => {
       res.status(400).json("incorrect credentials")
       return
     }
-    const accessToken = createAccessToken(employee._id)
-    const refreshToken = createRefreshToken(employee._id)
+    const accessToken = createAccessToken(
+      employee._id,
+      "employee",
+      employee.actif
+    )
+    const refreshToken = createRefreshToken(
+      employee._id,
+      "employee",
+      employee.actif
+    )
     await RefreshToken.create({
       userId: employee._id,
       userModel: "Employee",
