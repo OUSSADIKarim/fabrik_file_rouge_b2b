@@ -11,6 +11,8 @@ import swaggerUi from "swagger-ui-express"
 import swaggerJsdoc from "swagger-jsdoc"
 import { employeeRouter } from "./routes/employeeRoutes.js"
 import { authRouter } from "./routes/authRoutes.js"
+import { chatRoomRouter } from "./routes/chatRoomRoutes.js"
+import { messageRouter } from "./routes/messageRoutes.js"
 
 const app = express()
 
@@ -41,6 +43,8 @@ app.use(cors())
 app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)
 app.use("/api/employees", employeeRouter)
+app.use("/api/chatRooms", chatRoomRouter)
+app.use("/api/messages", messageRouter)
 
 // swagger
 

@@ -13,6 +13,7 @@ import { RefreshToken } from "../models/RefreshToken.js"
 import { ConfirmationToken } from "../models/ConfirmationToken.js"
 import { Employee } from "../models/Employee.js"
 import { generateRandomPassword } from "./../utils/generateRandomPassword.js"
+import { companyIdFromUserType } from "./../utils/companyIdfromUserType.js"
 import {
   createAccessToken,
   createConfirmToken,
@@ -196,8 +197,8 @@ export const getComapanies = async (req, res, next) => {
   }
 }
 export const getComapany = async (req, res, next) => {
-  const companyId = req.params.companyId
   try {
+    const companyId = await companyIdFromUserType(req.userId, req.userType)
     const company = await Company.findById(companyId)
     res.status(200).json(company)
   } catch (error) {
@@ -221,15 +222,9 @@ export const deleteCompany = async (req, res, next) => {
 }
 
 export const addCompanyLogo = async (req, res, next) => {
-  let companyId
-  if (req.userType === "employee") {
-    const employee = await Employee.findById(req.userId)
-    companyId = employee.company
-  } else {
-    companyId = req.userId
-  }
   const logo = req.file
   try {
+    const companyId = await companyIdFromUserType(req.userId, req.userType)
     const logoUploade = await cloudinaryLogoUploader(logo)
     const company = await Company.findById(companyId)
     company.logoURL = {
@@ -244,14 +239,8 @@ export const addCompanyLogo = async (req, res, next) => {
 }
 
 export const removeCompanyLogo = async (req, res, next) => {
-  let companyId
-  if (req.userType === "employee") {
-    const employee = await Employee.findById(req.userId)
-    companyId = employee.company
-  } else {
-    companyId = req.userId
-  }
   try {
+    const companyId = await companyIdFromUserType(req.userId, req.userType)
     const company = await Company.findById(companyId)
     const publicId = company.logoURL.publicId
     if (publicId === "") {
@@ -271,13 +260,6 @@ export const removeCompanyLogo = async (req, res, next) => {
 }
 
 export const updateCompanyDetails = async (req, res, next) => {
-  let companyId
-  if (req.userType === "employee") {
-    const employee = await Employee.findById(req.userId)
-    companyId = employee.company
-  } else {
-    companyId = req.userId
-  }
   const {
     name,
     companySize,
@@ -292,6 +274,7 @@ export const updateCompanyDetails = async (req, res, next) => {
   } = req.body
 
   try {
+    const companyId = await companyIdFromUserType(req.userId, req.userType)
     const company = await Company.findById(companyId)
     company.name = name
     company.companySize = companySize
