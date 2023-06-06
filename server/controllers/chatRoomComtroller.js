@@ -5,7 +5,7 @@ export const getAllChatRooms = async (req, res, next) => {
     const companyId = await companyIdFromUserType(req.userId, req.userType)
     const chatRooms = await ChatRoom.find({
       members: { $in: [companyId] },
-    }).populate("members")
+    })
     res.status(200).json(chatRooms)
   } catch (error) {
     next(error)

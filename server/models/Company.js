@@ -72,7 +72,6 @@ const companySchema = new Schema(
         validator: isPhoneNumber,
         message: "Invalid phone number",
       },
-      required: true,
       unique: true,
     },
 
@@ -126,7 +125,6 @@ const companySchema = new Schema(
     businessSectors: [
       {
         type: String,
-        required: true,
       },
     ],
 

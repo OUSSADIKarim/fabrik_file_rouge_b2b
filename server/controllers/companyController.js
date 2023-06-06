@@ -22,70 +22,26 @@ import {
 } from "../utils/tokenCreation.js"
 
 export const createCompany = async (req, res, next) => {
-  const logo = req.file
-  const {
-    name,
-    companySize,
-    employeesNumber,
-    legalStatus,
-    socialCapital,
-    headquarter,
-    website,
-    description,
-    email,
-    phoneNumber,
-    password,
-    nrc,
-    nif,
-    businessSectors,
-  } = req.body
+  const { name, email, password, nrc, nif } = req.body
 
   if (
     !name ||
-    !companySize ||
-    !employeesNumber ||
-    !legalStatus ||
-    !socialCapital ||
-    !headquarter ||
-    !website ||
-    !description ||
     !email ||
-    !phoneNumber ||
     !password ||
     !nrc ||
     !nif ||
-    !logo ||
-    !businessSectors
   ) {
     return next(createError(400, "Missing required data"))
   }
 
   try {
-    const logoUploade = await cloudinaryLogoUploader(logo)
     const newCompany = new Company({
       name,
-      companySize,
-      employeesNumber,
-      legalStatus,
-      socialCapital,
-      headquarter,
-      website,
-      description,
       email,
-      phoneNumber,
       password,
       nrc,
       nif,
-      logoURL: {
-        publicId: logoUploade.public_id,
-        url: logoUploade.url,
-      },
     })
-
-    JSON.parse(businessSectors).forEach((sector) => {
-      newCompany.businessSectors.push(sector)
-    })
-
     await newCompany.save()
     const confirmToken = createConfirmToken(newCompany._id, "company")
     await ConfirmationToken.create({
