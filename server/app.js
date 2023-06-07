@@ -4,9 +4,9 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import multer from "multer"
+import csurf from "csurf"
 import { companyRouter } from "./routes/companyRoutes.js"
 import { erroHandler } from "./middlewares/errorHandler.js"
-
 import swaggerUi from "swagger-ui-express"
 import swaggerJsdoc from "swagger-jsdoc"
 import { employeeRouter } from "./routes/employeeRoutes.js"
@@ -38,7 +38,13 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(upload.single("logo"))
-app.use(cors())
+app.use(csurf({ cookie: true }))
+app.use(
+  cors({
+    origin: `${process.env.BASEURL}5173`,
+    credentials: true,
+  })
+)
 
 app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)

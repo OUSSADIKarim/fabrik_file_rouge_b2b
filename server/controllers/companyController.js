@@ -23,14 +23,7 @@ import {
 
 export const createCompany = async (req, res, next) => {
   const { name, email, password, nrc, nif } = req.body
-
-  if (
-    !name ||
-    !email ||
-    !password ||
-    !nrc ||
-    !nif ||
-  ) {
+  if (!name || !email || !password || !nrc || !nif) {
     return next(createError(400, "Missing required data"))
   }
 

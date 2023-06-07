@@ -72,7 +72,6 @@ const companySchema = new Schema(
         validator: isPhoneNumber,
         message: "Invalid phone number",
       },
-      unique: true,
     },
 
     password: {
@@ -132,7 +131,6 @@ const companySchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Employee",
-        unique: true,
       },
     ],
   },
