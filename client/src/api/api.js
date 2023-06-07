@@ -22,3 +22,12 @@ export const signup = async (company, csurfToken) => {
   })
   return data
 }
+
+export const login = async (credentials, csurfToken) => {
+  const { data } = await publicApi.post(
+    `api/auth/login/${credentials.userType}`,
+    credentials,
+    { headers: { "X-CSRF-Token": csurfToken } }
+  )
+  return data
+}

@@ -3,9 +3,9 @@ import { createContext, useState } from "react"
 export const LogContext = createContext({})
 
 export const LogProvider = ({ children }) => {
-  const [logged, setLogged] = useState()
+  const [logState, setLogState] = useState(false)
   return (
-    <LogContext.Provider value={{ logged, setLogged }}>
+    <LogContext.Provider value={{ logState, setLogState }}>
       {children}
     </LogContext.Provider>
   )
