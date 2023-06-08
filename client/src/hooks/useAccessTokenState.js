@@ -1,8 +1,8 @@
 import { useContext } from "react"
-import { AcessTokenContext } from "../context/AccessTokenProvider"
+import { AccessTokenContext } from "../context/AccessTokenProvider"
 
 const useAccessTokenState = () => {
-  return useContext(AcessTokenContext)
+  return useContext(AccessTokenContext)
 }
 
 export default useAccessTokenState

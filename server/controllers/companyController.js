@@ -304,3 +304,17 @@ export const removeTeamMember = async (req, res, next) => {
     next(error)
   }
 }
+
+export const getTeamMembers = async (req, res, next) => {
+  if (req.userType !== "company") {
+    res.sendStatus(403)
+    return
+  }
+  const companyId = req.userId
+  try {
+    const teamMembers = await Employee.find({ company: companyId })
+    res.status(200).json(teamMembers)
+  } catch (error) {
+    next(error)
+  }
+}

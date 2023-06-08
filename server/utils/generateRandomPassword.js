@@ -9,6 +9,5 @@ export const generateRandomPassword = () => {
     symbols: true,
     strict: true,
   })
-  console.log(randomPassword)
   return randomPassword
 }

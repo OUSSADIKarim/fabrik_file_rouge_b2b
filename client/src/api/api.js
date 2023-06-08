@@ -5,7 +5,8 @@ const publicApi = axios.create({
   baseURL: baseUri,
   withCredentials: true,
 })
-const privateApi = axios.create({
+
+export const privateApi = axios.create({
   baseURL: baseUri,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
@@ -14,6 +15,11 @@ const privateApi = axios.create({
 export const csurf = async () => {
   const { data } = await publicApi.get("api/auth/csurf")
   return data.csurfProtection
+}
+
+export const refreshToken = async () => {
+  const { data } = await publicApi.get("api/auth/refreshToken")
+  return data
 }
 
 export const signup = async (company, csurfToken) => {

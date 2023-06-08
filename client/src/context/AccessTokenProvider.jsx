@@ -1,13 +1,12 @@
 import { createContext, useState } from "react"
 
-export const AcessTokenContext = createContext({})
+export const AccessTokenContext = createContext({})
 
-export const AcessTokenProvider = ({ children }) => {
-  const [acessToken, setAcessToken] = useState("")
-  console.log({ acessToken })
+export const AccessTokenProvider = ({ children }) => {
+  const [accessToken, setAccessToken] = useState("")
   return (
-    <AcessTokenContext.Provider value={{ acessToken, setAcessToken }}>
+    <AccessTokenContext.Provider value={{ accessToken, setAccessToken }}>
       {children}
-    </AcessTokenContext.Provider>
+    </AccessTokenContext.Provider>
   )
 }

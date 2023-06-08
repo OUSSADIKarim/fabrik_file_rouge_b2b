@@ -15,7 +15,7 @@ import Loading from "./Loading"
 import Error from "./Error"
 import useLogState from "../hooks/useLogState"
 import { useNavigate } from "react-router-dom"
-import useAccessTokenState from "../hooks/useAcessTokenState"
+import useAccessTokenState from "../hooks/useAccessTokenState"
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({
@@ -24,7 +24,7 @@ const LoginForm = () => {
     password: "",
   })
   const { setLogState } = useLogState()
-  const { setAcessToken } = useAccessTokenState()
+  const { setAccessToken } = useAccessTokenState()
   const [errorMessage, setErrorMessage] = useState("")
   const { mutate: login, isLoading } = useLogin(credentials)
   const navigate = useNavigate()
@@ -35,11 +35,11 @@ const LoginForm = () => {
     login(credentials, {
       onSuccess: (data) => {
         setLogState(true)
-        setAcessToken(data.accessToken)
+        setAccessToken(data.accessToken)
         navigate("/")
       },
       onError: (err) => {
-        setErrorMessage(err.response.data.message)
+        setErrorMessage(err.response.data)
       },
     })
   }

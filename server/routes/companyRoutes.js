@@ -67,6 +67,7 @@ import {
   deleteCompany,
   updateCompanyDetails,
   removeTeamMember,
+  getTeamMembers,
   addCompanyLogo,
 } from "../controllers/companyController.js"
 import { verifyAccessToken } from "../middlewares/jwt.js"
@@ -83,14 +84,21 @@ companyRouter.put("/", verifyAccessToken, updateCompanyDetails)
 companyRouter.post("/addLogo", verifyAccessToken, addCompanyLogo)
 companyRouter.delete("/removeLogo", verifyAccessToken, removeCompanyLogo)
 companyRouter.post(
-  "/addTeamMember",
+  "/team/addTeamMember",
   verifyAccessToken,
   checkIfActif,
   addTeamMember
 )
 companyRouter.delete(
-  "/removeTeamMember",
+  "/team/removeTeamMember",
   verifyAccessToken,
   checkIfActif,
   removeTeamMember
+)
+
+companyRouter.get(
+  "/team/teamMembers",
+  verifyAccessToken,
+  checkIfActif,
+  getTeamMembers
 )
