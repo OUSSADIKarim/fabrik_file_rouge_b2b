@@ -6,9 +6,10 @@ export const useLogin = (credentials) => {
   const { refetch: getCsurf } = useCsurf()
   return useMutation({
     mutationFn: async () => {
+      console.log("ere")
       const csurf = await getCsurf()
-      const newCompany = await login(credentials, csurf.data)
-      return newCompany
+      const company = await login(credentials, csurf.data)
+      return company
     },
   })
 }

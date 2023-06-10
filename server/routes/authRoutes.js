@@ -6,7 +6,7 @@ import { generateRefreshToken } from "../controllers/refreshTokenController.js"
 
 export const authRouter = express.Router()
 
-authRouter.post("/login/user", employeeLogin)
+authRouter.post("/login/employee", employeeLogin)
 authRouter.post("/login/company", companyLogin)
 authRouter.post("/logout", userLogout)
 authRouter.get("/refreshToken", generateRefreshToken)

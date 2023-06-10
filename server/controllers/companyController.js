@@ -42,7 +42,7 @@ export const createCompany = async (req, res, next) => {
       userModel: "Company",
       confirmationToken: confirmToken,
     })
-    await sendCompanyConfirmationEmail(newCompany.email, confirmToken)
+    // await sendCompanyConfirmationEmail(newCompany.email, confirmToken)
     res.status(200).json(newCompany)
   } catch (error) {
     next(error)

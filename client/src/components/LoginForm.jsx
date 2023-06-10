@@ -19,7 +19,7 @@ import useAccessTokenState from "../hooks/useAccessTokenState"
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({
-    userType: "company",
+    userType: "",
     email: "",
     password: "",
   })
@@ -31,6 +31,7 @@ const LoginForm = () => {
 
   const handleLoggin = async (e) => {
     e.preventDefault()
+    console.log(credentials)
     setErrorMessage("")
     login(credentials, {
       onSuccess: (data) => {
@@ -43,6 +44,7 @@ const LoginForm = () => {
       },
     })
   }
+
   return (
     <>
       {isLoading && (
@@ -52,10 +54,9 @@ const LoginForm = () => {
       {errorMessage && <Error errorMessage={errorMessage} />}
       <form className="w-full flex flex-col items-center justify-center gap-4">
         <Select
-          value={credentials.userType}
-          onChange={(e) =>
-            setCredentials({ ...credentials, userType: e.target.value })
-          }
+          onValueChange={(value) => {
+            setCredentials({ ...credentials, userType: value })
+          }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Are you ..." />
@@ -86,7 +87,7 @@ const LoginForm = () => {
             setCredentials({ ...credentials, password: e.target.value })
           }
         />
-        <Button onClick={handleLoggin}>Loggin</Button>
+        <Button onClick={handleLoggin}>Login</Button>
       </form>
     </>
   )

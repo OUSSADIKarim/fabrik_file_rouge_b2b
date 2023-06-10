@@ -22,7 +22,7 @@ const SignupForm = () => {
     setErrorMessage("")
     register(company, {
       onSuccess: () => {
-        navigate("/loggin")
+        navigate("/login")
       },
       onError: (err) => {
         setErrorMessage(err.response.data.message)

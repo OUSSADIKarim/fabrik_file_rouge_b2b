@@ -30,6 +30,10 @@ export const signup = async (company, csurfToken) => {
 }
 
 export const login = async (credentials, csurfToken) => {
+  console.log({
+    lala: credentials,
+    test: `api/auth/login/${credentials.userType}`,
+  })
   const { data } = await publicApi.post(
     `api/auth/login/${credentials.userType}`,
     credentials,
