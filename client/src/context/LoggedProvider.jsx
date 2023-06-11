@@ -4,7 +4,7 @@ import { useRefreshToken } from "./../hooks/useRefreshToken"
 export const LogContext = createContext({})
 
 export const LogProvider = ({ children }) => {
-  const [logState, setLogState] = useState(null)
+  const [logState, setLogState] = useState(false)
   const { refetch } = useRefreshToken()
   useEffect(() => {
     const refreshTokenFunction = async () => {

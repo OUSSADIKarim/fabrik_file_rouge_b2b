@@ -1,32 +1,10 @@
 import { NavLink } from "react-router-dom"
 import logo from "../assets/logo.svg"
 import { Button } from "@teovilla/shadcn-ui-react"
-import { useEffect, useState } from "react"
+import useTheme from "../hooks/useTheme"
 
 const VisitorNavbar = () => {
-  const [theme, setTheme] = useState(localStorage.theme)
-
-  useEffect(() => {
-    window.onload = () => {
-      if (!theme) {
-        const prefersColorSchemeIsDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches
-        prefersColorSchemeIsDark ? setTheme("dark") : setTheme("light")
-      }
-    }
-
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark")
-      document.documentElement.classList.remove("light")
-    } else if (theme === "light") {
-      document.documentElement.classList.add("light")
-      document.documentElement.classList.remove("dark")
-    }
-
-    localStorage.theme = theme
-  }, [theme])
-
+  const { theme, setTheme } = useTheme()
   const switchTheme = () => {
     theme === "dark" ? setTheme("light") : setTheme("dark")
   }
