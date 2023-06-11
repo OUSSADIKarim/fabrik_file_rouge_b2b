@@ -18,6 +18,12 @@ export default {
       },
     },
     extend: {
+      colors: {
+        primary: "#f0c905",
+        secondary: "#121212",
+        tertiary: "#ffffff",
+        quaternary: "#f29f05",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },

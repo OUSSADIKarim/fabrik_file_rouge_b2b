@@ -8,8 +8,13 @@ export const useRefreshToken = () => {
     queryKey: ["refreshToken"],
     queryFn: async () => {
       const data = await refreshToken()
-      setAccessToken(data)
       return data.accessToken
+    },
+    onSuccess: (data) => {
+      setAccessToken(data)
+    },
+    onError: (err) => {
+      return err
     },
     enabled: false,
   })

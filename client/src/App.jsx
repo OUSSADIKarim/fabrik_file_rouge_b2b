@@ -21,15 +21,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <LogProvider>
-          <AccessTokenProvider>
+        <AccessTokenProvider>
+          <LogProvider>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
             </Routes>
-          </AccessTokenProvider>
-        </LogProvider>
+          </LogProvider>
+        </AccessTokenProvider>
       </Router>
     </QueryClientProvider>
   )

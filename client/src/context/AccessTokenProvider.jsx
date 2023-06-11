@@ -4,6 +4,7 @@ export const AccessTokenContext = createContext({})
 
 export const AccessTokenProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState("")
+
   return (
     <AccessTokenContext.Provider value={{ accessToken, setAccessToken }}>
       {children}
