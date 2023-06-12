@@ -1,4 +1,4 @@
-import { Input, Button } from "@teovilla/shadcn-ui-react"
+import { Input, Button, Label } from "@teovilla/shadcn-ui-react"
 import { useRegister } from "../hooks/useRegister"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -38,43 +38,59 @@ const SignupForm = () => {
 
       {errorMessage && <Error errorMessage={errorMessage} />}
 
-      <form className="w-full flex flex-col items-center justify-center gap-4">
-        <Input
-          id="name"
-          type="text"
-          placeholder="Company Name"
-          className="w-1/3"
-          onChange={(e) => setCompany({ ...company, name: e.target.value })}
-        />
-        <Input
-          id="nrc"
-          type="text"
-          placeholder="nrc"
-          className="w-1/3"
-          onChange={(e) => setCompany({ ...company, nrc: e.target.value })}
-        />
-        <Input
-          id="nif"
-          type="text"
-          placeholder="nif"
-          className="w-1/3"
-          onChange={(e) => setCompany({ ...company, nif: e.target.value })}
-        />
-        <Input
-          id="email"
-          type="email"
-          placeholder="Email"
-          className="w-1/3"
-          onChange={(e) => setCompany({ ...company, email: e.target.value })}
-        />
-        <Input
-          id="password"
-          type="password"
-          placeholder="password"
-          className="w-1/3"
-          onChange={(e) => setCompany({ ...company, password: e.target.value })}
-        />
-        <Button onClick={handleSignup}>Signup</Button>
+      <form className="space-y-3">
+        <div>
+          <Label className="font-medium">Company Name</Label>
+          <Input
+            type="text"
+            required
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+          />
+        </div>
+        <div>
+          <Label className="font-medium">Commercial Register Number</Label>
+          <Input
+            type="text"
+            required
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            onChange={(e) => setCompany({ ...company, nrc: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="font-medium">Tax ID Number</Label>
+          <Input
+            type="text"
+            required
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            onChange={(e) => setCompany({ ...company, nif: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="font-medium">Email</Label>
+          <Input
+            type="email"
+            required
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            onChange={(e) => setCompany({ ...company, email: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="font-medium">Password</Label>
+          <Input
+            type="password"
+            required
+            onChange={(e) =>
+              setCompany({ ...company, password: e.target.value })
+            }
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+          />
+        </div>
+        <Button
+          className="bg-secondary dark:bg-primary text-primary dark:text-tertiary text-lg font-medium transition-all ease-in-out duration-300 hover:bg-primary hover:text-secondary dark:hover:bg-tertiary dark:hover:text-primary hover:scale-105 p-2 rounded-md"
+          onClick={handleSignup}
+        >
+          Create Account
+        </Button>
       </form>
     </>
   )

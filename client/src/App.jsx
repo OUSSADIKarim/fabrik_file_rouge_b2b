@@ -6,6 +6,8 @@ import Home from "./pages/Home"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import { ThemProvider } from "./context/themeProvider"
+import Navbar from "./components/Navbar"
+import NotFound from "./pages/NotFound"
 
 function App() {
   const queryClient = new QueryClient({
@@ -25,10 +27,12 @@ function App() {
         <AccessTokenProvider>
           <LogProvider>
             <ThemProvider>
+              <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </ThemProvider>
           </LogProvider>

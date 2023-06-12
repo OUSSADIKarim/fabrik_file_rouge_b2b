@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.active {
-  color: #f0c905;
+div[role="dialog"] svg {
+  stroke: #f0c905;
+  width: 25px;
+  height: 25px;
+}
+
+.bg_pattern {
+  background-image: url("./assets/bg_pattern.svg");
 }

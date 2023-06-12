@@ -1,9 +1,13 @@
 import useLogState from "../hooks/useLogState"
+import Loading from "./Loading"
 import UserNavbar from "./UserNavbar"
 import VisitorNavbar from "./visitorNavbar"
 
 const Navbar = () => {
   const { logState } = useLogState()
+  if (logState === null) {
+    return <Loading />
+  }
   return <>{logState ? <UserNavbar /> : <VisitorNavbar />}</>
 }
 
