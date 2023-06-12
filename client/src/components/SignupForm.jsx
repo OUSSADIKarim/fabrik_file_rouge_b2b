@@ -44,7 +44,7 @@ const SignupForm = () => {
           <Input
             type="text"
             required
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            className="w-full mt-2 px-3 py-2 text-secondary dark:text-tertiary bg-transparent outline-none border border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary shadow-sm rounded-lg"
           />
         </div>
         <div>
@@ -52,7 +52,7 @@ const SignupForm = () => {
           <Input
             type="text"
             required
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            className="w-full mt-2 px-3 py-2 text-secondary dark:text-tertiary bg-transparent outline-none border border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary shadow-sm rounded-lg"
             onChange={(e) => setCompany({ ...company, nrc: e.target.value })}
           />
         </div>
@@ -61,7 +61,7 @@ const SignupForm = () => {
           <Input
             type="text"
             required
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            className="w-full mt-2 px-3 py-2 text-secondary dark:text-tertiary bg-transparent outline-none border border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary shadow-sm rounded-lg"
             onChange={(e) => setCompany({ ...company, nif: e.target.value })}
           />
         </div>
@@ -70,7 +70,7 @@ const SignupForm = () => {
           <Input
             type="email"
             required
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            className="w-full mt-2 px-3 py-2 text-secondary dark:text-tertiary bg-transparent outline-none border border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary shadow-sm rounded-lg"
             onChange={(e) => setCompany({ ...company, email: e.target.value })}
           />
         </div>
@@ -82,15 +82,17 @@ const SignupForm = () => {
             onChange={(e) =>
               setCompany({ ...company, password: e.target.value })
             }
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-primary dark:focus:ring-primary shadow-sm rounded-lg"
           />
         </div>
-        <Button
-          className="bg-secondary dark:bg-primary text-primary dark:text-tertiary text-lg font-medium transition-all ease-in-out duration-300 hover:bg-primary hover:text-secondary dark:hover:bg-tertiary dark:hover:text-primary hover:scale-105 p-2 rounded-md"
-          onClick={handleSignup}
-        >
-          Create Account
-        </Button>
+        <div className="w-full flex items-center justify-center">
+          <Button
+            className="bg-secondary dark:bg-primary text-primary dark:text-tertiary text-lg font-medium transition-all ease-in-out duration-300 hover:bg-primary hover:text-secondary dark:hover:bg-tertiary dark:hover:text-primary hover:scale-105 p-2 rounded-md"
+            onClick={handleSignup}
+          >
+            Create Account
+          </Button>
+        </div>
       </form>
     </>
   )

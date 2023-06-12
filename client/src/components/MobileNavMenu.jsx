@@ -8,13 +8,21 @@ import {
 import SwitchTheme from "./SwitchTheme"
 import { NavLink } from "react-router-dom"
 import logo from "../assets/logo.svg"
+import { useEffect, useState } from "react"
 
 const MobileNavMenu = ({ links }) => {
+  const [dialogOpen, setDialogOpen] = useState(false)
+
   return (
     <div className="md:hidden w-full flex items-center justify-end">
       <SwitchTheme />
 
-      <Dialog>
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          open ? setDialogOpen(true) : setDialogOpen(false)
+        }}
+      >
         <DialogTrigger asChild>
           <Button className="bg-transparent dark:bg-transparent hover:bg-transparent dark:hover:bg-transparent hover:scale-125 focus:ring-0 focus:ring-offset-0 transition-all ease-in-out duration-300">
             <svg
@@ -35,9 +43,12 @@ const MobileNavMenu = ({ links }) => {
             </svg>
           </Button>
         </DialogTrigger>
-        <DialogContent className="fixed top-0 right-0 h-full w-1/2 rounded-lg slide-in-from-top-0 slide-in-from-right-20 flex flex-col items-center gap-20 dark:bg-secondary">
+        <DialogContent className="fixed top-0 right-0 h-full w-[70%] rounded-lg slide-in-from-top-0 slide-in-from-right-20 flex flex-col items-center gap-20 dark:bg-secondary">
           <DialogHeader className="flex items-center self-center mt-10">
             <NavLink
+              onClick={() => {
+                setDialogOpen(false)
+              }}
               to={"/"}
               className="flex items-center justify-center w-[80px]"
             >
@@ -52,6 +63,9 @@ const MobileNavMenu = ({ links }) => {
             {links.map((link, index) => {
               return (
                 <NavLink
+                  onClick={() => {
+                    setDialogOpen(false)
+                  }}
                   key={index}
                   to={link.path}
                   className="text-secondary dark:text-tertiary [&:is(.active)]:text-primary text-lg font-medium transition-all ease-in-out duration-300 hover:text-primary dark:hover:text-primary hover:scale-105"
@@ -63,12 +77,18 @@ const MobileNavMenu = ({ links }) => {
           </div>
           <div className="flex flex-col items-center justify-end gap-8 w-1/2">
             <NavLink
+              onClick={() => {
+                setDialogOpen(false)
+              }}
               to={"/login"}
               className="text-secondary dark:text-tertiary [&:is(.active)]:text-primary text-lg font-medium transition-all ease-in-out duration-300 hover:text-primary dark:hover:text-primary hover:scale-105"
             >
               Login
             </NavLink>
             <NavLink
+              onClick={() => {
+                setDialogOpen(false)
+              }}
               to={"/signup"}
               className="bg-secondary dark:bg-primary text-primary dark:text-tertiary text-lg font-medium transition-all ease-in-out duration-300 hover:bg-primary hover:text-secondary dark:hover:bg-tertiary dark:hover:text-primary hover:scale-105 p-2 rounded-md"
             >
