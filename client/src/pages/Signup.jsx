@@ -8,10 +8,13 @@ const Signup = () => {
       <div className="bg_pattern relative flex-1 hidden items-center justify-center h-screen lg:flex transition-all ease-in-out duration-300 shadow-[inset_20px_20px_1000px_#ffffff] dark:shadow-[inset_20px_20px_1000px_#121212] blur-[0.5px]">
         <div className="relative z-10 w-full max-w-md ">
           <div className=" mt-10 space-y-5">
-            <div className="flex flex-col items-center justify-center gap-8">
+            <NavLink
+              to="/"
+              className="flex flex-col items-center justify-center gap-8 transition-all ease-in-out duration-300 hover:scale-105"
+            >
               <img src={logo} alt="Bee2Bee" width="150px" />
               <h1 className="text-primary font-bold text-3xl">Bee2Bee</h1>
-            </div>
+            </NavLink>
             <h3 className="text-secondary dark:text-tertiary text-3xl font-bold">
               Start growing your business quickly
             </h3>
