@@ -1,12 +1,17 @@
+import { NavLink } from "react-router-dom"
 import SignupForm from "../components/SignupForm"
-import logo from "../assets/logo.svg"
+import logo from "../assets/logo_icon.svg"
 
 const Signup = () => {
   return (
-    <main className="w-full flex">
-      <div className="bg_pattern relative flex-1 hidden items-center justify-center h-screen lg:flex">
+    <main className="w-full h-[100vh] overflow-hidden flex bg_pattern pt-4">
+      <div className="bg_pattern relative flex-1 hidden items-center justify-center h-screen lg:flex transition-all ease-in-out duration-300 shadow-[inset_20px_20px_1000px_#ffffff] dark:shadow-[inset_20px_20px_1000px_#121212] blur-[0.5px]">
         <div className="relative z-10 w-full max-w-md ">
-          <div className=" mt-16 space-y-3">
+          <div className=" mt-10 space-y-5">
+            <div className="flex flex-col items-center justify-center gap-8">
+              <img src={logo} alt="Bee2Bee" width="150px" />
+              <h1 className="text-primary font-bold text-3xl">Bee2Bee</h1>
+            </div>
             <h3 className="text-secondary dark:text-tertiary text-3xl font-bold">
               Start growing your business quickly
             </h3>
@@ -36,19 +41,28 @@ const Signup = () => {
                 className="w-10 h-10 rounded-full border-2 border-white"
               />
               <p className="text-sm text-secondary dark:text-tertiary font-medium translate-x-5">
-                Join 5.000+ users
+                Join 5.000+ companies
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex-1 flex items-start justify-center h-screen">
+      <div className="flex-1 flex items-start justify-center h-screen transition-all ease-in-out duration-300">
         <div className="w-full max-w-md space-y-4 px-4 transition-all ease-in-out duration-300 bg-tertiary dark:bg-secondary text-secondary dark:text-tertiary sm:px-0">
-          <div className="">
+          <div>
             <div className="mt-5 space-y-2">
               <h3 className="text-primary text-center text-2xl font-bold sm:text-3xl">
                 Sign up
               </h3>
+              <p className="text-center mr-1">
+                Already have an account?{" "}
+                <NavLink
+                  to="/login"
+                  className="text-primary font-semibold hover:bg-secondary hover:text-tertiary hover:rounded-md hover:p-1 dark:hover:bg-tertiary dark:hover:text-secondary transition-all ease-in-out duration-300"
+                >
+                  Login here
+                </NavLink>
+              </p>
             </div>
           </div>
           <SignupForm />

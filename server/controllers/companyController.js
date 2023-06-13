@@ -23,6 +23,7 @@ import {
 
 export const createCompany = async (req, res, next) => {
   const { name, email, password, nrc, nif } = req.body
+  console.log({ name, email, password, nrc, nif })
   if (!name || !email || !password || !nrc || !nif) {
     return next(createError(400, "Missing required data"))
   }
@@ -42,7 +43,7 @@ export const createCompany = async (req, res, next) => {
       userModel: "Company",
       confirmationToken: confirmToken,
     })
-    // await sendCompanyConfirmationEmail(newCompany.email, confirmToken)
+    await sendCompanyConfirmationEmail(newCompany.email, confirmToken)
     res.status(200).json(newCompany)
   } catch (error) {
     next(error)

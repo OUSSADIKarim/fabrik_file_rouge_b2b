@@ -25,6 +25,7 @@ export default {
         quaternary: "#f29f05",
       },
       fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       keyframes: {

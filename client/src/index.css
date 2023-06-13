@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Montserrat";
+  src: url("../public/fonts/Montserrat/Montserrat-VariableFont_wght.ttf");
+}
+
+html {
+  font-family: "Montserrat";
+}
+
 div[role="dialog"] svg {
   stroke: #f0c905;
   width: 25px;
@@ -10,4 +19,10 @@ div[role="dialog"] svg {
 
 .bg_pattern {
   background-image: url("./assets/bg_pattern.svg");
+}
+
+@media only screen and (min-width: 1024px) {
+  .bg_pattern:is(main) {
+    background-image: none;
+  }
 }
