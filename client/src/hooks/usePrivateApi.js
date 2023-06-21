@@ -10,7 +10,10 @@ export const usePrivateApi = () => {
     const requestInterceptor = privateApi.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`
+          config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${accessToken}`,
+          }
         }
         return config
       },
@@ -21,17 +24,20 @@ export const usePrivateApi = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config
-        if (error && !prevRequest?.sent) {
+        if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true
           const newAccessToken = await getNewAccessToken()
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken.data}`
+          prevRequest.headers = {
+            ...prevRequest.headers,
+            Authorization: `Bearer ${newAccessToken.data}`,
+          }
           return privateApi(prevRequest)
         }
         return Promise.reject(error)
       }
     )
 
-    return () => {
+    return async () => {
       privateApi.interceptors.request.eject(requestInterceptor)
       privateApi.interceptors.response.eject(responseInterceptor)
     }

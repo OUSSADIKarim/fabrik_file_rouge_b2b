@@ -24,7 +24,7 @@ const LoginForm = () => {
     email: "",
     password: "",
   })
-  const { setLogState } = useLogState()
+  const { setLogState, setUser } = useLogState()
   const { setAccessToken } = useAccessTokenState()
   const [errorMessage, setErrorMessage] = useState("")
   const { mutate: login, isLoading } = useLogin(credentials)
@@ -32,13 +32,14 @@ const LoginForm = () => {
 
   const handleLoggin = async (e) => {
     e.preventDefault()
-    console.log(credentials)
     setErrorMessage("")
     login(credentials, {
       onSuccess: (data) => {
         setLogState(true)
+        localStorage.user = data.company.companyId
+        setUser(data.company.companyId)
         setAccessToken(data.accessToken)
-        navigate("/")
+        navigate("/feed")
       },
       onError: (err) => {
         setErrorMessage(err.response.data)

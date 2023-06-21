@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom"
 import logo from "../assets/logo_icon.png"
-import MobileNavMenu from "./MobileNavMenu"
-import DesktopMenue from "./DesktopMenue"
+import VisitorMobileNavMenu from "./VisitorMobileNavMenu"
+import VisitorDesktopNavMenue from "./VisitorDesktopNavMenue"
 
 const VisitorNavbar = () => {
   const links = [
@@ -26,8 +26,8 @@ const VisitorNavbar = () => {
           <p className="text-primary font-bold ml-2">Bee2Bee</p>
         </NavLink>
       </div>
-      <MobileNavMenu links={links} />
-      <DesktopMenue links={links} />
+      <VisitorMobileNavMenu links={links} />
+      <VisitorDesktopNavMenue links={links} />
     </nav>
   )
 }

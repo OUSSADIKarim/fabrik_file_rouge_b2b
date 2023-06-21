@@ -38,13 +38,22 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(upload.single("logo"))
-app.use(csurf({ cookie: true }))
 app.use(
   cors({
-    origin: `${process.env.BASEURL}5173`,
+    origin: (origin, callback) => {
+      const whiteList = ["http://localhost:5173"]
+      if (whiteList.indexOf(origin) !== -1 || !origin) {
+        callback(null, true)
+      } else {
+        console.log("test")
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+    optionsSuccessStatus: 204,
     credentials: true,
   })
 )
+app.use(csurf({ cookie: { httpOnly: true } }))
 
 app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)

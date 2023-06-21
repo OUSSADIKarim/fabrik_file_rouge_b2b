@@ -17,10 +17,10 @@ const chatRoomSchema = new Schema(
 
 chatRoomSchema.statics.createChatRoom = async (companyId, receiverId) => {
   try {
-    const newChatRoom = new ChatRoom()
-    newChatRoom.members.push(companyId, receiverId)
-    await newChatRoom.save()
-    res.status(200).json({ newChatRoom })
+    const newChatRoom = await ChatRoom.create({
+      members: [companyId, receiverId],
+    })
+    return newChatRoom
   } catch (error) {
     throw error
   }

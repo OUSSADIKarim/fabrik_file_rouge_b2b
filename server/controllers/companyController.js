@@ -146,6 +146,7 @@ export const getComapanies = async (req, res, next) => {
     next(error)
   }
 }
+
 export const getComapany = async (req, res, next) => {
   try {
     const companyId = await companyIdFromUserType(req.userId, req.userType)

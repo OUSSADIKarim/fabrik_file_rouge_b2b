@@ -6,9 +6,12 @@ import Home from "./pages/Home"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import { ThemProvider } from "./context/themeProvider"
-import Navbar from "./components/Navbar"
 import NotFound from "./pages/NotFound"
 import MainLayout from "./layouts/mainLayout"
+import { Messaging } from "./pages/Messaging"
+import Notifications from "./pages/Notifications"
+import Feed from "./pages/Feed"
+import UserLayout from "./layouts/UserLayout"
 
 function App() {
   const queryClient = new QueryClient({
@@ -34,6 +37,11 @@ function App() {
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Home />} />
                   <Route path="*" element={<NotFound />} />
+                </Route>
+                <Route element={<UserLayout />}>
+                  <Route path="/feed" element={<Feed />} />
+                  <Route path="/messaging" element={<Messaging />} />
+                  <Route path="/notifications" element={<Notifications />} />
                 </Route>
               </Routes>
             </ThemProvider>

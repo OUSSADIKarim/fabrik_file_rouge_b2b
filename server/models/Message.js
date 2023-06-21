@@ -16,6 +16,12 @@ const messageSchema = new Schema(
       required: true,
     },
 
+    receiver: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
+
     content: {
       type: String,
       required: true,

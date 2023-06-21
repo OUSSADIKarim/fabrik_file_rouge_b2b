@@ -1,3 +1,5 @@
+import { Company } from "../models/Company.js"
+import { companyIdFromUserType } from "../utils/companyIdfromUserType.js"
 import { ChatRoom } from "./../models/ChatRoom.js"
 
 export const getAllChatRooms = async (req, res, next) => {
@@ -6,6 +8,7 @@ export const getAllChatRooms = async (req, res, next) => {
     const chatRooms = await ChatRoom.find({
       members: { $in: [companyId] },
     })
+    console.log({ chatRooms })
     res.status(200).json(chatRooms)
   } catch (error) {
     next(error)

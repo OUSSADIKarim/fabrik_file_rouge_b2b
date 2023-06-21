@@ -13,8 +13,8 @@ export const userLogout = async (req, res, next) => {
   }
   try {
     await RefreshToken.findOneAndDelete({ refreshToken })
-    res.clearCookie("refreshCookie")
-    res.sendStatus(200)
+    res.clearCookie("refreshToken")
+    res.status(200).json("logged out")
   } catch (error) {
     next(error)
   }

@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom"
 import SwitchTheme from "./SwitchTheme"
 
-const DesktopMenue = ({ links }) => {
+const VisitorDesktopNavMenue = ({ links }) => {
   return (
     <div className="hidden md:flex items-center justify-evenly  w-[80%]">
       <div className="hidden md:flex items-center justify-center gap-8 w-full">
@@ -36,4 +36,4 @@ const DesktopMenue = ({ links }) => {
   )
 }
 
-export default DesktopMenue
+export default VisitorDesktopNavMenue

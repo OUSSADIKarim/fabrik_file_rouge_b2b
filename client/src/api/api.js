@@ -1,14 +1,16 @@
 import axios from "axios"
 const baseUri = import.meta.env.VITE_BASEURI
 
-const publicApi = axios.create({
+export const publicApi = axios.create({
   baseURL: baseUri,
   withCredentials: true,
 })
 
 export const privateApi = axios.create({
   baseURL: baseUri,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    // "Content-Type": "application/json",
+  },
   withCredentials: true,
 })
 
@@ -30,14 +32,15 @@ export const signup = async (company, csurfToken) => {
 }
 
 export const login = async (credentials, csurfToken) => {
-  console.log({
-    lala: credentials,
-    test: `api/auth/login/${credentials.userType}`,
-  })
   const { data } = await publicApi.post(
     `api/auth/login/${credentials.userType}`,
     credentials,
     { headers: { "X-CSRF-Token": csurfToken } }
   )
+  return data
+}
+
+export const logout = async () => {
+  const { data } = await publicApi.get(`api/auth/logout`)
   return data
 }

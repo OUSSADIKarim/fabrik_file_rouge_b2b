@@ -8,7 +8,7 @@ export const authRouter = express.Router()
 
 authRouter.post("/login/employee", employeeLogin)
 authRouter.post("/login/company", companyLogin)
-authRouter.post("/logout", userLogout)
+authRouter.get("/logout", userLogout)
 authRouter.get("/refreshToken", generateRefreshToken)
 authRouter.get("/csurf", (req, res) => {
   res.json({ csurfProtection: req.csrfToken() })

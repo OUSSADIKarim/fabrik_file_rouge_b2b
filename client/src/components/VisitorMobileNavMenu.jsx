@@ -8,9 +8,9 @@ import {
 import SwitchTheme from "./SwitchTheme"
 import { NavLink } from "react-router-dom"
 import logo from "../assets/logo.svg"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-const MobileNavMenu = ({ links }) => {
+const VisitorMobileNavMenu = ({ links }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   return (
@@ -101,4 +101,4 @@ const MobileNavMenu = ({ links }) => {
   )
 }
 
-export default MobileNavMenu
+export default VisitorMobileNavMenu

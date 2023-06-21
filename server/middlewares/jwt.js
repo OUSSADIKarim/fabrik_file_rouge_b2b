@@ -1,3 +1,4 @@
+import { createError } from "../utils/createError.js"
 import { verify } from "../utils/tokenCreation.js"
 
 export const verifyAccessToken = (req, res, next) => {
@@ -12,7 +13,8 @@ export const verifyAccessToken = (req, res, next) => {
     process.env.ACCESS_TOKEN_SECRET,
     async (error, decodedToken) => {
       if (error) {
-        next(error)
+        const err = createError(403, error.message)
+        next(err)
         return
       }
       req.userId = decodedToken.userId

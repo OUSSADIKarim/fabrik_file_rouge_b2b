@@ -26,22 +26,27 @@ const companySchema = new Schema(
 
     companySize: {
       type: Number,
+      default: null,
     },
 
     employeesNumber: {
       type: Number,
+      default: null,
     },
 
     legalStatus: {
       type: String,
+      default: null,
     },
 
     socialCapital: {
       type: Number,
+      default: null,
     },
 
     headquarter: {
       type: String,
+      default: null,
     },
 
     website: {
@@ -50,10 +55,12 @@ const companySchema = new Schema(
         validator: isURL,
         message: "invalid URL",
       },
+      default: null,
     },
 
     description: {
       type: String,
+      default: null,
     },
 
     email: {
@@ -72,6 +79,7 @@ const companySchema = new Schema(
         validator: isPhoneNumber,
         message: "Invalid phone number",
       },
+      default: null,
     },
 
     password: {
@@ -111,6 +119,7 @@ const companySchema = new Schema(
     logoURL: {
       publicId: {
         type: String,
+        default: null,
       },
       url: {
         type: String,
@@ -118,12 +127,14 @@ const companySchema = new Schema(
           validator: isURL,
           message: "invalid URL",
         },
+        default: null,
       },
     },
 
     businessSectors: [
       {
         type: String,
+        default: null,
       },
     ],
 

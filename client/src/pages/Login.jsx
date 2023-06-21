@@ -8,7 +8,7 @@ const Login = () => {
   const { logState } = useLogState()
   const navigate = useNavigate()
   useEffect(() => {
-    logState && navigate("/")
+    logState && navigate("/feed")
   }, [logState, navigate])
 
   return (
