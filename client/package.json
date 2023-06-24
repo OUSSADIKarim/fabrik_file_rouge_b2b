@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/hooks": "^6.0.14",
     "@tanstack/react-query": "^4.29.12",
     "@teovilla/shadcn-ui-react": "^0.5.0",
     "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.2"
+    "react-router-dom": "^6.11.2",
+    "react-scroll-to-bottom": "^4.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

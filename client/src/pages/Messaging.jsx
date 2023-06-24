@@ -2,20 +2,23 @@ import { useEffect, useState } from "react"
 import ChatRooms from "../components/ChatRooms"
 import MessageContainer from "../components/MessageContainer"
 import { useChatRooms } from "../hooks/useChatRooms"
+import { ChatRoomProvider } from "../context/ChatRoomContext"
 
 export const Messaging = () => {
   const [chatRooms, setChatRooms] = useState([])
-  const { data: chatRoomsList, refetch: getChatRooms } = useChatRooms()
+  const { data, refetch: getChatRooms } = useChatRooms()
 
   useEffect(() => {
     getChatRooms()
-    setChatRooms(chatRoomsList)
-  }, [chatRoomsList, getChatRooms])
+    setChatRooms(data)
+  }, [data, getChatRooms])
 
   return (
-    <main className="h-[100vh] flex items-center justify-center">
-      <ChatRooms chatRooms={chatRooms} />
-      <MessageContainer />
+    <main className="h-screen overflow-hidden grid grid-rows-[10%,90%] sm:grid-rows-1 grid-cols-1 sm:grid-cols-[25%,75%]">
+      <ChatRoomProvider>
+        <ChatRooms chatRooms={chatRooms} />
+        <MessageContainer />
+      </ChatRoomProvider>
     </main>
   )
 }

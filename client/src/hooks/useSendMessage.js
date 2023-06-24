@@ -7,11 +7,10 @@ export const useSendMessage = () => {
   const { refetch: getCsurf } = useCsurf()
   return useMutation({
     mutationFn: async (message) => {
-      console.log(message.body)
       const messageContent = { message: message.body }
       const csurfToken = await getCsurf()
       const newMessage = await privateApi.post(
-        `api/messages/${message.recieverId}`,
+        `api/messages/${message.receiverId}`,
         messageContent,
         {
           headers: {

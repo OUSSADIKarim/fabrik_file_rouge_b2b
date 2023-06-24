@@ -12,7 +12,7 @@ import { useEffect, useState } from "react"
 const Feed = () => {
   const [companies, setCompanies] = useState(null)
   const [message, setMessage] = useState({
-    recieverId: "",
+    receiverId: "",
     body: "",
   })
   const { data: companiesData, refetch } = useCompanies()
@@ -50,7 +50,7 @@ const Feed = () => {
                   onChange={(e) => {
                     setMessage({
                       ...message,
-                      recieverId: company._id,
+                      receiverId: company._id,
                       body: e.target.value,
                     })
                     console.log({ input: message })

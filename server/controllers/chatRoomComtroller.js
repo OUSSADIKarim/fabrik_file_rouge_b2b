@@ -8,7 +8,6 @@ export const getAllChatRooms = async (req, res, next) => {
     const chatRooms = await ChatRoom.find({
       members: { $in: [companyId] },
     })
-    console.log({ chatRooms })
     res.status(200).json(chatRooms)
   } catch (error) {
     next(error)

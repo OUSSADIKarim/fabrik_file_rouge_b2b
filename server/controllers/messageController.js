@@ -6,29 +6,31 @@ import { ChatRoom } from "./../models/ChatRoom.js"
 export const createMassage = async (req, res, next) => {
   const { receiverId } = req.params
   const { message } = req.body
+  console.log({ receiverId, message })
   let chatRoomId
   try {
     const companyId = await companyIdFromUserType(req.userId, req.userType)
-    console.log({ companyId, receiverId })
     const chatRoom = await ChatRoom.findOne({
       $or: [
         { members: [companyId, receiverId] },
         { members: [receiverId, companyId] },
       ],
     })
-    console.log({ lol: chatRoom })
     if (!chatRoom) {
+      console.log("not chat")
       const newchatRoom = await ChatRoom.createChatRoom(companyId, receiverId)
       chatRoomId = newchatRoom._id
     } else {
       chatRoomId = chatRoom._id
     }
+    console.log({ chatRoom })
     const newMessage = await Message.create({
       chatRoom: chatRoomId,
       sender: companyId,
       receiver: receiverId,
       content: message,
     })
+    console.log({ message })
     await Notification.createMessageNotification(chatRoomId, companyId)
     res.status(200).json(newMessage)
   } catch (error) {
@@ -38,10 +40,17 @@ export const createMassage = async (req, res, next) => {
 
 export const getMessages = async (req, res, next) => {
   const { chatRoomId } = req.params
+  const { page } = req.query
+  const messagesPerPage = 20
+  console.log({ page })
   try {
-    const messages = await Message.find({ chatRoom: chatRoomId }).sort({
-      createdAt: "desc",
-    })
+    const messages = await Message.find({ chatRoom: chatRoomId })
+      .sort({
+        createdAt: "desc",
+      })
+      .skip(page * messagesPerPage)
+      .limit(messagesPerPage)
+    console.log({ f: messages.length })
     res.status(200).json(messages)
   } catch (error) {
     next(error)

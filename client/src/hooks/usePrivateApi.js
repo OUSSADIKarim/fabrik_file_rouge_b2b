@@ -9,7 +9,7 @@ export const usePrivateApi = () => {
   useEffect(() => {
     const requestInterceptor = privateApi.interceptors.request.use(
       (config) => {
-        if (!config.headers["Authorization"]) {
+        if (!config.headers["Authorization"] && accessToken !== "") {
           config.headers = {
             ...config.headers,
             Authorization: `Bearer ${accessToken}`,
@@ -24,7 +24,11 @@ export const usePrivateApi = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config
-        if (error?.response?.status === 403 && !prevRequest?.sent) {
+        if (
+          (error?.response?.status === 403 ||
+            error?.response?.status === 401) &&
+          !prevRequest?.sent
+        ) {
           prevRequest.sent = true
           const newAccessToken = await getNewAccessToken()
           prevRequest.headers = {
