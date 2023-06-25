@@ -13,6 +13,8 @@ import { employeeRouter } from "./routes/employeeRoutes.js"
 import { authRouter } from "./routes/authRoutes.js"
 import { chatRoomRouter } from "./routes/chatRoomRoutes.js"
 import { messageRouter } from "./routes/messageRoutes.js"
+import http from "http"
+import { Server } from "socket.io"
 
 const app = express()
 
@@ -54,6 +56,38 @@ app.use(
   })
 )
 app.use(csurf({ cookie: { httpOnly: true } }))
+
+// Socket.io
+const server = http.createServer(app)
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+})
+
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`)
+
+  socket.on("join_ChatRoom", (data) => {
+    console.log("room", { data })
+    socket.join(data)
+    console.log(`User with ID: ${socket.id} joined room: ${data}`)
+  })
+
+  socket.on("send_message", (data) => {
+    console.log({ data })
+    socket.to(data.chatRoom).emit("receive_message", data)
+  })
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id)
+  })
+})
+
+server.listen(8081, () => {
+  console.log("socket io server running at http://localhost:8081")
+})
 
 app.use("/api/auth", authRouter)
 app.use("/api/companies", companyRouter)
