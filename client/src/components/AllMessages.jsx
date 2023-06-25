@@ -5,8 +5,8 @@ import { useIntersection } from "@mantine/hooks"
 import useChatRoomState from "../hooks/useChatRoomState"
 
 const AllMessages = () => {
-  const [messages, setMessages] = useState([])
-  const { chatRoomId } = useChatRoomState()
+  const [newMessage, setnewMessage] = useState(null)
+  const { chatRoomId, messages, setMessages, socket } = useChatRoomState()
   const userId = localStorage.user
   const lastMessageRef = useRef(null)
 
@@ -16,6 +16,20 @@ const AllMessages = () => {
     root: lastMessageRef.current,
     threshold: 1,
   })
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setnewMessage(data)
+    })
+  }, [socket])
+
+  useEffect(() => {
+    if (newMessage?.chatRoom === chatRoomId) {
+      setMessages((prev) => {
+        return [newMessage, ...prev]
+      })
+    }
+  }, [newMessage])
 
   useEffect(() => {
     data.pages = []

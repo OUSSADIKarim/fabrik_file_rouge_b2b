@@ -11,7 +11,7 @@ import useChatRoomState from "../hooks/useChatRoomState"
 const ChatCompanyCard = ({ chatRoom }) => {
   const [otherUser, setOtherUser] = useState(null)
   const [message, setMessage] = useState(null)
-  const { setReceiverId, setChatRoomId } = useChatRoomState()
+  const { setReceiverId, setChatRoomId, messages, socket } = useChatRoomState()
   const { data: latestMessage, refetch: getLatestMessage } =
     useLatestMessage(chatRoom)
 
@@ -23,10 +23,21 @@ const ChatCompanyCard = ({ chatRoom }) => {
       : setOtherUser(message?.sender)
   }, [getLatestMessage, latestMessage, message, otherUser])
 
+  useEffect(() => {
+    getLatestMessage()
+  }, [messages])
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessage(data)
+    })
+  }, [socket])
+
   const handleClick = (e) => {
     e.preventDefault()
     setReceiverId(otherUser?._id)
     setChatRoomId(chatRoom?._id)
+    socket.emit("join_ChatRoom", chatRoom?._id)
   }
 
   return (

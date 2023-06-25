@@ -4,7 +4,7 @@ import { useSendMessage } from "../hooks/useSendMessage"
 import useChatRoomState from "../hooks/useChatRoomState"
 
 const SendMessageForm = () => {
-  const { receiverId } = useChatRoomState()
+  const { receiverId, socket, setMessages, messages } = useChatRoomState()
   const [disabled, setDisabled] = useState(false)
   const [message, setMessage] = useState({
     receiverId: "",
@@ -19,8 +19,9 @@ const SendMessageForm = () => {
   const handdleMessage = (e) => {
     e.preventDefault()
     sendMessage(message, {
-      onSuccess: (data) => {
-        console.log({ data })
+      onSuccess: async (data) => {
+        await socket.emit("send_message", data.data)
+        setMessage({ receiverId: "", body: "" })
       },
       onError: (err) => {
         console.log({ err })
