@@ -1,8 +1,8 @@
 import { useEffect } from "react"
-import LoginForm from "../components/LoginForm"
-import useLogState from "../hooks/useLogState"
+import useLogState from "../hooks/contexts/useLogState"
 import { NavLink, useNavigate } from "react-router-dom"
 import logo from "../assets/logo_icon.svg"
+import LoginForm from "../components/auth/LoginForm"
 
 const Login = () => {
   const { logState } = useLogState()

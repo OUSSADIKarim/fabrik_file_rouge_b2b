@@ -1,4 +1,3 @@
-import { useCompanies } from "../hooks/useCompanies"
 import {
   Button,
   HoverCard,
@@ -6,8 +5,9 @@ import {
   HoverCardTrigger,
   Input,
 } from "@teovilla/shadcn-ui-react"
-import { useSendMessage } from "../hooks/useSendMessage"
 import { useEffect, useState } from "react"
+import { useCompanies } from "../hooks/apis/useCompanies"
+import { useSendMessage } from "../hooks/apis/useSendMessage"
 
 const Feed = () => {
   const [companies, setCompanies] = useState(null)

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react"
-import { useRefreshToken } from "./../hooks/useRefreshToken"
+import { useRefreshToken } from "../hooks/apis/auth/useRefreshToken"
 
 export const LogContext = createContext({})
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import ChatRooms from "../components/ChatRooms"
-import MessageContainer from "../components/MessageContainer"
-import { useChatRooms } from "../hooks/useChatRooms"
+import ChatRooms from "../components/messaging/ChatRooms"
+import MessageContainer from "../components/messaging/MessageContainer"
+import { useChatRooms } from "../hooks/apis/messaging/useChatRooms"
 import { ChatRoomProvider } from "../context/ChatRoomContext"
 
 export const Messaging = () => {

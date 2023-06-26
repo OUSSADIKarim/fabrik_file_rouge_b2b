@@ -1,5 +1,5 @@
 import { Button } from "@teovilla/shadcn-ui-react"
-import useTheme from "../hooks/useTheme"
+import useTheme from "../hooks/contexts/useTheme"
 
 const SwitchTheme = () => {
   const { theme, setTheme } = useTheme()

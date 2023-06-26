@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
-import SignupForm from "../components/SignupForm"
 import logo from "../assets/logo_icon.svg"
+import SignupForm from "../components/auth/SignupForm"
 
 const Signup = () => {
   return (
