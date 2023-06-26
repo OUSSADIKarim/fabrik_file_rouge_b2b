@@ -6,7 +6,6 @@ import { ChatRoom } from "./../models/ChatRoom.js"
 export const createMassage = async (req, res, next) => {
   const { receiverId } = req.params
   const { message } = req.body
-  console.log({ receiverId, message })
   let chatRoomId
   try {
     const companyId = await companyIdFromUserType(req.userId, req.userType)
@@ -17,20 +16,17 @@ export const createMassage = async (req, res, next) => {
       ],
     })
     if (!chatRoom) {
-      console.log("not chat")
       const newchatRoom = await ChatRoom.createChatRoom(companyId, receiverId)
       chatRoomId = newchatRoom._id
     } else {
       chatRoomId = chatRoom._id
     }
-    console.log({ chatRoom })
     const newMessage = await Message.create({
       chatRoom: chatRoomId,
       sender: companyId,
       receiver: receiverId,
       content: message,
     })
-    console.log({ message })
     await Notification.createMessageNotification(chatRoomId, companyId)
     res.status(200).json(newMessage)
   } catch (error) {
