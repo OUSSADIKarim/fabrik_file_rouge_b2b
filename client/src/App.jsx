@@ -12,6 +12,7 @@ import { Messaging } from "./pages/Messaging"
 import Notifications from "./pages/Notifications"
 import Feed from "./pages/Feed"
 import UserLayout from "./layouts/UserLayout"
+import Post from "./pages/Post"
 
 function App() {
   const queryClient = new QueryClient({
@@ -40,6 +41,7 @@ function App() {
                 </Route>
                 <Route element={<UserLayout />}>
                   <Route path="/feed" element={<Feed />} />
+                  <Route path="/feed/:postId" element={<Post />} />
                   <Route path="/messaging" element={<Messaging />} />
                   <Route path="/notifications" element={<Notifications />} />
                 </Route>

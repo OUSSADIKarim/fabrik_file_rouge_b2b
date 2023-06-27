@@ -1,67 +1,53 @@
-import {
-  Button,
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-  Input,
-} from "@teovilla/shadcn-ui-react"
-import { useEffect, useState } from "react"
-import { useCompanies } from "../hooks/apis/useCompanies"
-import { useSendMessage } from "../hooks/apis/useSendMessage"
+import { useEffect, useRef, useState } from "react"
+import { useGetAllPosts } from "../hooks/apis/posts/useGetAllPosts"
+import { CreatePostForm } from "../components/posts/CreatePostForm"
+import PostCard from "./../components/posts/PostCard"
+import { useIntersection } from "@mantine/hooks"
 
 const Feed = () => {
-  const [companies, setCompanies] = useState(null)
-  const [message, setMessage] = useState({
-    receiverId: "",
-    body: "",
+  const [posts, setPosts] = useState(null)
+  const [newPost, setNewPost] = useState(null)
+  const lastPostRef = useRef(null)
+
+  const { data, fetchNextPage, hasNextPage } = useGetAllPosts()
+
+  const { ref, entry } = useIntersection({
+    root: lastPostRef.current,
+    threshold: 1,
   })
-  const { data: companiesData, refetch } = useCompanies()
-  const { mutate: sendMessage } = useSendMessage()
 
   useEffect(() => {
-    refetch()
-    setCompanies(companiesData)
-  }, [companiesData, refetch])
+    fetchNextPage()
+  }, [])
 
-  const handdleMessage = (e) => {
-    e.preventDefault()
-    console.log({ message })
-    sendMessage(message, {
-      onSuccess: (data) => {
-        console.log({ data })
-      },
-      onError: (err) => {
-        console.log({ err })
-      },
+  useEffect(() => {
+    if (hasNextPage && entry?.isIntersecting) {
+      fetchNextPage()
+    }
+  }, [entry?.isIntersecting, hasNextPage])
+
+  useEffect(() => {
+    setPosts(data?.pages.flatMap((post) => post))
+  }, [data])
+
+  useEffect(() => {
+    console.log({ newPost })
+    setPosts((prev) => {
+      return [newPost, ...prev]
     })
-  }
+  }, [newPost])
+
   return (
-    <div>
-      {companies?.map((company) => {
-        return (
-          <div key={company._id}>
-            <HoverCard>
-              <HoverCardTrigger>{company.name}</HoverCardTrigger>
-              <HoverCardContent>
-                <Button onClick={handdleMessage}>Message</Button>
-                <Input
-                  type="text"
-                  placeholder="message"
-                  onChange={(e) => {
-                    setMessage({
-                      ...message,
-                      receiverId: company._id,
-                      body: e.target.value,
-                    })
-                    console.log({ input: message })
-                  }}
-                />
-              </HoverCardContent>
-            </HoverCard>
-          </div>
+    <main className="w-full">
+      <CreatePostForm setNewPost={setNewPost} />
+      {posts?.map((post, i) => {
+        return i === posts?.length - 2 ? (
+          <PostCard key={i} post={post} innerRef={ref} />
+        ) : (
+          <PostCard key={i} post={post} />
         )
       })}
-    </div>
+    </main>
   )
 }
 

@@ -38,7 +38,6 @@ export const getMessages = async (req, res, next) => {
   const { chatRoomId } = req.params
   const { page } = req.query
   const messagesPerPage = 20
-  console.log({ page })
   try {
     const messages = await Message.find({ chatRoom: chatRoomId })
       .sort({
@@ -46,7 +45,6 @@ export const getMessages = async (req, res, next) => {
       })
       .skip(page * messagesPerPage)
       .limit(messagesPerPage)
-    console.log({ f: messages.length })
     res.status(200).json(messages)
   } catch (error) {
     next(error)

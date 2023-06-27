@@ -41,3 +41,14 @@ export const logout = async () => {
   const { data } = await publicApi.get(`api/auth/logout`)
   return data
 }
+
+export const getAllposts = async (pageParam) => {
+  console.log({ pageParam })
+  const { data } = await publicApi.get(`api/posts?page=${pageParam}`)
+  return data
+}
+
+export const getPost = async (postId) => {
+  const { data } = await publicApi.get(`api/posts/${postId}`)
+  return data
+}

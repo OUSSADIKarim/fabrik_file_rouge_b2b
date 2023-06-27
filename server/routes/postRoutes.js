@@ -10,8 +10,8 @@ import {
 
 export const postRouter = express.Router()
 
-postRouter.get("/", getAllPosts)
-postRouter.get("/:postId", getPost)
+postRouter.get("/", verifyAccessToken, getAllPosts)
+postRouter.get("/:postId", verifyAccessToken, getPost)
 postRouter.post("/", verifyAccessToken, createPost)
 postRouter.put("/:postId", verifyAccessToken, updatePost)
 postRouter.delete("/:postId", verifyAccessToken, deletePost)

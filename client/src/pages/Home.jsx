@@ -1,5 +1,4 @@
-import AddEmployeeForm from "../components/AddEmployeeForm"
-
+import AddEmployeeForm from "./../components/employees/AddEmployeeForm"
 const Home = () => {
   return (
     <>

@@ -1,8 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@teovilla/shadcn-ui-react"
+import { Link } from "react-router-dom"
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, innerRef }) => {
   return (
-    <div>
+    <Link to={`${post?._id}`} ref={innerRef} className="block w-full">
       <Avatar>
         <AvatarImage
           src={post?.company?.logoURL?.publicId}
@@ -14,7 +15,7 @@ const PostCard = ({ post }) => {
       <p>{post?.createdAt}</p>
 
       <div>{post?.content}</div>
-    </div>
+    </Link>
   )
 }
 

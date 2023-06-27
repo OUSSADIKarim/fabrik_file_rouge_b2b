@@ -15,6 +15,7 @@ import { chatRoomRouter } from "./routes/chatRoomRoutes.js"
 import { messageRouter } from "./routes/messageRoutes.js"
 import http from "http"
 import { Server } from "socket.io"
+import { postRouter } from "./routes/postRoutes.js"
 
 const app = express()
 
@@ -85,6 +86,7 @@ app.use("/api/companies", companyRouter)
 app.use("/api/employees", employeeRouter)
 app.use("/api/chatRooms", chatRoomRouter)
 app.use("/api/messages", messageRouter)
+app.use("/api/posts", postRouter)
 
 // swagger
 

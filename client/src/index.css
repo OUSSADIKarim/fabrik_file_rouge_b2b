@@ -27,6 +27,10 @@ div[role="dialog"] svg {
   }
 }
 
+.bg_pattern-second {
+  background-image: url("./assets/bg_pattern.svg");
+}
+
 section .active {
   background-color: #f0c905;
 }
