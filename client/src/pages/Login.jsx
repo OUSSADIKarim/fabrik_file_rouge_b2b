@@ -7,6 +7,7 @@ import LoginForm from "../components/auth/LoginForm"
 const Login = () => {
   const { logState } = useLogState()
   const navigate = useNavigate()
+
   useEffect(() => {
     logState && navigate("/feed")
   }, [logState, navigate])

@@ -1,8 +1,14 @@
 import { NavLink } from "react-router-dom"
+import { usePageTransition } from "../hooks/animations/usePageTransition"
 
 const NotFound = () => {
+  const animationRef = usePageTransition()
+
   return (
-    <section className="bg-tertiary dark:bg-secondary h-[100vh] flex flex-col items-center justify-center gap-4 text-4xl">
+    <section
+      ref={animationRef}
+      className="bg-tertiary dark:bg-secondary h-[100vh] flex flex-col items-center justify-center gap-4 text-4xl"
+    >
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center">
           <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-secondary dark:text-tertiary">

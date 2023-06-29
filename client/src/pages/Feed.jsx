@@ -3,11 +3,14 @@ import { useGetAllPosts } from "../hooks/apis/posts/useGetAllPosts"
 import { CreatePostForm } from "../components/posts/CreatePostForm"
 import PostCard from "./../components/posts/PostCard"
 import { useIntersection } from "@mantine/hooks"
+import { usePageTransition } from "../hooks/animations/usePageTransition"
 
 const Feed = () => {
   const [posts, setPosts] = useState(null)
   const [newPost, setNewPost] = useState(null)
   const lastPostRef = useRef(null)
+
+  const animationRef = usePageTransition()
 
   const { data, fetchNextPage, hasNextPage } = useGetAllPosts()
 
@@ -38,7 +41,7 @@ const Feed = () => {
   }, [newPost])
 
   return (
-    <main className="w-full">
+    <main ref={animationRef} className="w-full">
       <CreatePostForm setNewPost={setNewPost} />
       {posts?.map((post, i) => {
         return i === posts?.length - 2 ? (

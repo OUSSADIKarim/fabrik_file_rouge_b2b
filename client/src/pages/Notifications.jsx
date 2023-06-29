@@ -1,5 +1,9 @@
+import { usePageTransition } from "../hooks/animations/usePageTransition"
+
 const Notifications = () => {
-  return <div>Notifications</div>
+  const animationRef = usePageTransition()
+
+  return <main ref={animationRef}>Notifications</main>
 }
 
 export default Notifications
