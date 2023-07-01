@@ -15,9 +15,8 @@ export const usePageTransition = () => {
   }
 
   const pageTransitionFn = async () => {
-    if (isPresent) {
-      await enterAnimation()
-    } else {
+    await enterAnimation()
+    if (!isPresent) {
       await exitAnimation()
     }
   }

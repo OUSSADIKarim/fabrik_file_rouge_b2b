@@ -14,6 +14,7 @@ export const userLogout = async (req, res, next) => {
   try {
     await RefreshToken.findOneAndDelete({ refreshToken })
     res.clearCookie("refreshToken")
+    res.clearCookie("_csrf")
     res.status(200).json("logged out")
   } catch (error) {
     next(error)

@@ -5,6 +5,7 @@ import { useCsurf } from "../auth/useCsurf"
 export const useCreatePost = (setNewPost) => {
   const privateApi = usePrivateApi()
   const { refetch: getCsurf } = useCsurf()
+
   return useMutation({
     mutationFn: async (post) => {
       const csurfToken = await getCsurf()

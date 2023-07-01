@@ -5,9 +5,7 @@ import VisitorNavbar from "./visitorNavbar"
 
 const Navbar = () => {
   const { logState } = useLogState()
-  if (logState === null) {
-    return <Loading />
-  }
+
   return <>{logState ? <UserNavbar /> : <VisitorNavbar />}</>
 }
 

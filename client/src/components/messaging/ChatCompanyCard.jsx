@@ -7,13 +7,18 @@ import {
 import { useEffect, useState } from "react"
 import { useLatestMessage } from "../../hooks/apis/messaging/useLatestMessage"
 import useChatRoomState from "../../hooks/contexts/useChatRoomState"
+import { useErrorBoundary } from "react-error-boundary"
 
 const ChatCompanyCard = ({ chatRoom }) => {
   const [otherUser, setOtherUser] = useState(null)
   const [message, setMessage] = useState(null)
   const { setReceiverId, setChatRoomId, messages, socket } = useChatRoomState()
-  const { data: latestMessage, refetch: getLatestMessage } =
-    useLatestMessage(chatRoom)
+  const { showBoundary } = useErrorBoundary()
+  const {
+    data: latestMessage,
+    refetch: getLatestMessage,
+    error,
+  } = useLatestMessage(chatRoom)
 
   useEffect(() => {
     getLatestMessage()
@@ -32,6 +37,12 @@ const ChatCompanyCard = ({ chatRoom }) => {
       setMessage(data)
     })
   }, [socket])
+
+  useEffect(() => {
+    if (error) {
+      showBoundary(error)
+    }
+  }, [error])
 
   const handleClick = (e) => {
     e.preventDefault()

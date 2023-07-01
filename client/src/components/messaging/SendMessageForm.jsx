@@ -2,29 +2,45 @@ import { Button, Input } from "@teovilla/shadcn-ui-react"
 import { useEffect, useState } from "react"
 import { useSendMessage } from "../../hooks/apis/messaging/useSendMessage"
 import useChatRoomState from "../../hooks/contexts/useChatRoomState"
+import { useErrorBoundary } from "react-error-boundary"
 
 const SendMessageForm = () => {
-  const { receiverId, socket, setMessages, messages } = useChatRoomState()
-  const [disabled, setDisabled] = useState(false)
+  const { receiverId, socket } = useChatRoomState()
+  const [disabledInput, setDisabledInput] = useState(false)
+  const [disabledBtn, setDisabledBtn] = useState(false)
   const [message, setMessage] = useState({
     receiverId: "",
     body: "",
   })
-  const { mutate: sendMessage } = useSendMessage()
+
+  const { showBoundary } = useErrorBoundary()
+  const { mutate: sendMessage, error } = useSendMessage()
 
   useEffect(() => {
-    !receiverId ? setDisabled(true) : setDisabled(false)
-  }, [receiverId])
+    !receiverId
+      ? () => {
+          setDisabledInput(true)
+          setDisabledBtn(true)
+        }
+      : () => {
+          setDisabledInput(false)
+          setDisabledBtn(false)
+        }
+    !message.body ? setDisabledBtn(true) : setDisabledBtn(false)
+  }, [message.body, receiverId])
+
+  useEffect(() => {
+    if (error) {
+      showBoundary(error)
+    }
+  }, [error])
 
   const handdleMessage = (e) => {
     e.preventDefault()
     sendMessage(message, {
       onSuccess: async (data) => {
         await socket.emit("send_message", data.data)
-        setMessage({ receiverId: "", body: "" })
-      },
-      onError: (err) => {
-        console.log({ err })
+        setMessage({ ...message, body: "" })
       },
     })
   }
@@ -36,15 +52,16 @@ const SendMessageForm = () => {
       <Input
         type="text"
         placeholder="message"
+        value={message.body}
         onChange={(e) => {
           setMessage({
             receiverId: receiverId,
             body: e.target.value,
           })
         }}
-        disabled={disabled}
+        disabled={disabledInput}
       />
-      <Button type="submit" disabled={disabled}>
+      <Button type="submit" disabled={disabledBtn}>
         Send
       </Button>
     </form>

@@ -2,13 +2,11 @@ import { useQuery } from "@tanstack/react-query"
 import { logout } from "../../../api/api"
 import useLogState from "../../contexts/useLogState"
 import useAccessTokenState from "../../contexts/useAccessTokenState"
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export const useLogout = () => {
   const { setLogState } = useLogState()
   const { setAccessToken } = useAccessTokenState()
-  const [setErrorMessage] = useState("")
   const navigate = useNavigate()
 
   return useQuery({
@@ -20,10 +18,8 @@ export const useLogout = () => {
     onSuccess: () => {
       setLogState(false)
       setAccessToken("")
+      localStorage.removeItem("user")
       navigate("/")
-    },
-    onError: (err) => {
-      setErrorMessage(err.response.data)
     },
     enabled: false,
   })

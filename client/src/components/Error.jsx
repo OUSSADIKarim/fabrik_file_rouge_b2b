@@ -8,16 +8,19 @@ import {
   AlertDialogTitle,
 } from "@teovilla/shadcn-ui-react"
 
-const Error = ({ errorMessage }) => {
+const Error = ({ error, resetErrorBoundary }) => {
+  console.log({ error, resetErrorBoundary })
   return (
     <AlertDialog defaultOpen="true">
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Error</AlertDialogTitle>
-          <AlertDialogDescription>{errorMessage}</AlertDialogDescription>
+          <AlertDialogDescription>{error.message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={resetErrorBoundary}>
+            Try again
+          </AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

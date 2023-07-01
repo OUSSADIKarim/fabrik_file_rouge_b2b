@@ -5,6 +5,7 @@ import { usePrivateApi } from "../usePrivateApi"
 export const useGetPost = (postId) => {
   const privateApi = usePrivateApi()
   const { refetch: getCsurf } = useCsurf()
+
   return useQuery({
     queryKey: ["post", postId],
     queryFn: async () => {

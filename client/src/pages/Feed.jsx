@@ -4,6 +4,7 @@ import { CreatePostForm } from "../components/posts/CreatePostForm"
 import PostCard from "./../components/posts/PostCard"
 import { useIntersection } from "@mantine/hooks"
 import { usePageTransition } from "../hooks/animations/usePageTransition"
+import { useErrorBoundary } from "react-error-boundary"
 
 const Feed = () => {
   const [posts, setPosts] = useState(null)
@@ -11,8 +12,8 @@ const Feed = () => {
   const lastPostRef = useRef(null)
 
   const animationRef = usePageTransition()
-
-  const { data, fetchNextPage, hasNextPage } = useGetAllPosts()
+  const { showBoundary } = useErrorBoundary()
+  const { data, fetchNextPage, hasNextPage, error } = useGetAllPosts()
 
   const { ref, entry } = useIntersection({
     root: lastPostRef.current,
@@ -20,25 +21,37 @@ const Feed = () => {
   })
 
   useEffect(() => {
+    console.log("1")
     fetchNextPage()
   }, [])
 
   useEffect(() => {
+    console.log("2")
+    console.log(lastPostRef)
     if (hasNextPage && entry?.isIntersecting) {
       fetchNextPage()
     }
-  }, [entry?.isIntersecting, hasNextPage])
+  }, [entry?.isIntersecting, fetchNextPage, hasNextPage])
 
   useEffect(() => {
+    console.log("3")
     setPosts(data?.pages.flatMap((post) => post))
   }, [data])
 
   useEffect(() => {
-    console.log({ newPost })
-    setPosts((prev) => {
-      return [newPost, ...prev]
-    })
+    if (newPost) {
+      console.log("4")
+      setPosts((prev) => {
+        return [newPost, ...prev]
+      })
+    }
   }, [newPost])
+
+  useEffect(() => {
+    if (error) {
+      showBoundary(error)
+    }
+  }, [error])
 
   return (
     <main ref={animationRef} className="w-full">

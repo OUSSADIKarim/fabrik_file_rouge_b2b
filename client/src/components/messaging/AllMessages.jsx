@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import ScrollToBottom from "react-scroll-to-bottom"
 import { useIntersection } from "@mantine/hooks"
 import useChatRoomState from "../../hooks/contexts/useChatRoomState"
+import { useErrorBoundary } from "react-error-boundary"
 
 const AllMessages = () => {
   const [newMessage, setnewMessage] = useState(null)
@@ -10,7 +11,8 @@ const AllMessages = () => {
   const userId = localStorage.user
   const lastMessageRef = useRef(null)
 
-  const { data, fetchNextPage, hasNextPage } = useAllMessages(chatRoomId)
+  const { showBoundary } = useErrorBoundary()
+  const { data, fetchNextPage, hasNextPage, error } = useAllMessages(chatRoomId)
 
   const { ref, entry } = useIntersection({
     root: lastMessageRef.current,
@@ -46,6 +48,12 @@ const AllMessages = () => {
   useEffect(() => {
     setMessages(data?.pages.flatMap((message) => message))
   }, [data])
+
+  useEffect(() => {
+    if (error) {
+      showBoundary(error)
+    }
+  }, [error])
 
   return (
     <div className="h-full">

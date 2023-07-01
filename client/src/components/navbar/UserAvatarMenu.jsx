@@ -10,13 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@teovilla/shadcn-ui-react"
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { useLogout } from "../../hooks/apis/auth/useLogout"
-import useLogState from "../../hooks/contexts/useLogState"
-import useAccessTokenState from "../../hooks/contexts/useAccessTokenState"
-import { useState } from "react"
-import Loading from "../Loading"
-import Error from "../Error"
+import { useEffect } from "react"
+import { useErrorBoundary } from "react-error-boundary"
 
 const UserAvatarMenu = () => {
   const menueOptions = [
@@ -34,40 +31,44 @@ const UserAvatarMenu = () => {
     },
   ]
 
-  const [errorMessage] = useState("")
-  const { refetch: logout } = useLogout()
+  const { showBoundary } = useErrorBoundary()
+  const { refetch: logout, error } = useLogout()
 
   const handleLogout = async (e) => {
     e.preventDefault()
     await logout()
   }
+
+  useEffect(() => {
+    if (error) {
+      showBoundary(error)
+    }
+  }, [error])
+
   return (
-    <>
-      {errorMessage && <Error errorMessage={errorMessage} />}
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {menueOptions.map((option, index) => {
-            return (
-              <DropdownMenuItem key={index}>
-                <NavLink to={option.path}>{option.name}</NavLink>
-              </DropdownMenuItem>
-            )
-          })}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Button onClick={handleLogout}>Log out</Button>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {menueOptions.map((option, index) => {
+          return (
+            <DropdownMenuItem key={index}>
+              <NavLink to={option.path}>{option.name}</NavLink>
+            </DropdownMenuItem>
+          )
+        })}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Button onClick={handleLogout}>Log out</Button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

@@ -4,6 +4,7 @@ import useAccessTokenState from "../../contexts/useAccessTokenState"
 
 export const useRefreshToken = () => {
   const { setAccessToken } = useAccessTokenState()
+
   return useQuery({
     queryKey: ["refreshToken"],
     queryFn: async () => {
@@ -12,9 +13,6 @@ export const useRefreshToken = () => {
     },
     onSuccess: (data) => {
       setAccessToken(data)
-    },
-    onError: (err) => {
-      return err
     },
     enabled: false,
   })

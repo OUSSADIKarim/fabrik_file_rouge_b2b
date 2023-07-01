@@ -9,23 +9,30 @@ import {
   SelectValue,
   Textarea,
 } from "@teovilla/shadcn-ui-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useCreatePost } from "../../hooks/apis/posts/useCreatePost"
+import { useErrorBoundary } from "react-error-boundary"
 
 export const CreatePostForm = ({ setNewPost }) => {
   const postCategories = ["Services and products", "Investement"]
-
   const [post, setPost] = useState({
     category: "Investement",
     content: "",
   })
-
-  const { mutate } = useCreatePost(setNewPost)
+  const { showBoundary } = useErrorBoundary()
+  const { mutate, error } = useCreatePost(setNewPost)
 
   const handdlecreatePost = (e) => {
     e.preventDefault()
     mutate(post)
   }
+
+  useEffect(() => {
+    if (error) {
+      showBoundary(error)
+    }
+  }, [error])
+
   return (
     <form
       className="h-fit flex justify-center items-center"

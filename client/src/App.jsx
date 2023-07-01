@@ -13,6 +13,10 @@ import Notifications from "./pages/Notifications"
 import Feed from "./pages/Feed"
 import UserLayout from "./layouts/UserLayout"
 import Post from "./pages/Post"
+import { Suspense } from "react"
+import Loading from "./components/Loading"
+import { ErrorBoundary } from "react-error-boundary"
+import Error from "./components/Error"
 
 function App() {
   const queryClient = new QueryClient({
@@ -23,34 +27,42 @@ function App() {
         refetchOnReconnect: false,
         retry: false,
         staleTime: 1000 * 60 * 60 * 24,
+        suspense: true,
       },
     },
   })
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <AccessTokenProvider>
-          <LogProvider>
-            <ThemProvider>
-              <Routes>
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route element={<MainLayout />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="*" element={<NotFound />} />
-                </Route>
-                <Route element={<UserLayout />}>
-                  <Route path="/feed" element={<Feed />} />
-                  <Route path="/feed/:postId" element={<Post />} />
-                  <Route path="/messaging" element={<Messaging />} />
-                  <Route path="/notifications" element={<Notifications />} />
-                </Route>
-              </Routes>
-            </ThemProvider>
-          </LogProvider>
-        </AccessTokenProvider>
-      </Router>
-    </QueryClientProvider>
+    <ErrorBoundary FallbackComponent={Error}>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<Loading />}>
+          <Router>
+            <AccessTokenProvider>
+              <LogProvider>
+                <ThemProvider>
+                  <Routes>
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route element={<MainLayout />}>
+                      <Route path="/" element={<Home />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                    <Route element={<UserLayout />}>
+                      <Route path="/feed" element={<Feed />} />
+                      <Route path="/feed/:postId" element={<Post />} />
+                      <Route path="/messaging" element={<Messaging />} />
+                      <Route
+                        path="/notifications"
+                        element={<Notifications />}
+                      />
+                    </Route>
+                  </Routes>
+                </ThemProvider>
+              </LogProvider>
+            </AccessTokenProvider>
+          </Router>
+        </Suspense>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 

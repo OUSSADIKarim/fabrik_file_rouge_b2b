@@ -18,9 +18,9 @@ const Post = () => {
   return (
     <main
       ref={animationRef}
-      className="w-full h-full p-8 flex flex-col justify-center items-center bg_pattern-second "
+      className="w-full h-full p-8 flex flex-col justify-center items-center bg-[#F3F2EF] dark:bg-secondary "
     >
-      <section className="w-full xl:w-[1024px] h-full bg-white dark:bg-[#2c2f33] dark:text-white p-8">
+      <section className="w-full xl:w-[1024px] h-full bg-tertiary dark:text-white dark:bg-[#1B1B1B] p-8">
         <div className="flex gap-4">
           <Avatar>
             <AvatarImage
