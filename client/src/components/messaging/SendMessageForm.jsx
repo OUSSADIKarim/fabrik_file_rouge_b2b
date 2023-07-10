@@ -4,8 +4,8 @@ import { useSendMessage } from "../../hooks/apis/messaging/useSendMessage"
 import useChatRoomState from "../../hooks/contexts/useChatRoomState"
 import { useErrorBoundary } from "react-error-boundary"
 
-const SendMessageForm = () => {
-  const { receiverId, socket } = useChatRoomState()
+const SendMessageForm = ({ receiverId }) => {
+  const { socket } = useChatRoomState()
   const [disabledInput, setDisabledInput] = useState(false)
   const [disabledBtn, setDisabledBtn] = useState(false)
   const [message, setMessage] = useState({
@@ -36,11 +36,15 @@ const SendMessageForm = () => {
   }, [error])
 
   const handdleMessage = (e) => {
+    console.log({ socket })
     e.preventDefault()
+    console.log({ message })
     sendMessage(message, {
       onSuccess: async (data) => {
+        console.log({ socket })
         await socket.emit("send_message", data.data)
         setMessage({ ...message, body: "" })
+        console.log({ ff: message })
       },
     })
   }

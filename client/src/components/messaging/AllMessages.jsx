@@ -4,15 +4,18 @@ import ScrollToBottom from "react-scroll-to-bottom"
 import { useIntersection } from "@mantine/hooks"
 import useChatRoomState from "../../hooks/contexts/useChatRoomState"
 import { useErrorBoundary } from "react-error-boundary"
+import useLogState from "../../hooks/contexts/useLogState"
+import Loading from "../Loading"
 
 const AllMessages = () => {
   const [newMessage, setnewMessage] = useState(null)
   const { chatRoomId, messages, setMessages, socket } = useChatRoomState()
-  const userId = localStorage.user
+  const { user } = useLogState()
   const lastMessageRef = useRef(null)
 
   const { showBoundary } = useErrorBoundary()
-  const { data, fetchNextPage, hasNextPage, error } = useAllMessages(chatRoomId)
+  const { data, fetchNextPage, hasNextPage, error, isFetching } =
+    useAllMessages(chatRoomId)
 
   const { ref, entry } = useIntersection({
     root: lastMessageRef.current,
@@ -64,13 +67,14 @@ const AllMessages = () => {
           className="w-full h-full"
           initialScrollBehavior="smooth"
         >
+          {isFetching && <Loading />}
           <div className="flex flex-col-reverse gap-8 p-4">
             {messages?.map((message, i) => {
               return i === messages?.length - 2 ? (
                 <p
                   className={`px-4 py-2 rounded-xl
                   ${
-                    userId === message?.sender
+                    user.companyId === message?.sender
                       ? "self-end bg-primary text-tertiary"
                       : "self-start bg-[#d8d8d8] text-secondary"
                   }
@@ -84,7 +88,7 @@ const AllMessages = () => {
                 <p
                   className={`px-4 py-2 rounded-xl
                 ${
-                  userId === message?.sender
+                  user.companyId === message?.sender
                     ? "self-end bg-primary text-tertiary"
                     : "self-start bg-[#d8d8d8] text-secondary"
                 }

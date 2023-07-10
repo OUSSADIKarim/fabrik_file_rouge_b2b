@@ -20,9 +20,12 @@ export default {
     extend: {
       colors: {
         primary: "#f0c905",
-        secondary: "#121212",
+        secondary: "#18191A",
         tertiary: "#ffffff",
         quaternary: "#f29f05",
+        backgroundLight: "#F0F2F5",
+        backgroundDark_primary: "#242526",
+        backgroundDark_secondary: "#4E4F50",
       },
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],

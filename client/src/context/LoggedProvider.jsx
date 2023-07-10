@@ -6,12 +6,17 @@ export const LogContext = createContext({})
 
 export const LogProvider = ({ children }) => {
   const [logState, setLogState] = useState(null)
-  const [user, setUser] = useState(localStorage.user)
+  const [user, setUser] = useState(JSON.parse(localStorage.user || "{}"))
   const { accessToken } = useAccessTokenState()
-  const { data, refetch } = useRefreshToken()
+  const { refetch } = useRefreshToken()
+
   useEffect(() => {
     if (accessToken) {
       refetch()
+    }
+
+    if (user?.companyId) {
+      setLogState(true)
     }
   }, [])
   return (

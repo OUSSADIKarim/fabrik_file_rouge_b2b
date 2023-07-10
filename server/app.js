@@ -69,10 +69,12 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   socket.on("join_ChatRoom", (data) => {
+    console.log({ join: data })
     socket.join(data)
   })
 
   socket.on("send_message", (data) => {
+    console.log({ send: data })
     socket.to(data.chatRoom).emit("receive_message", data)
   })
 })

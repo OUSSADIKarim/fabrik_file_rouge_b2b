@@ -8,10 +8,12 @@ import { useEffect, useState } from "react"
 import { useLatestMessage } from "../../hooks/apis/messaging/useLatestMessage"
 import useChatRoomState from "../../hooks/contexts/useChatRoomState"
 import { useErrorBoundary } from "react-error-boundary"
+import useLogState from "./../../hooks/contexts/useLogState"
 
 const ChatCompanyCard = ({ chatRoom }) => {
   const [otherUser, setOtherUser] = useState(null)
   const [message, setMessage] = useState(null)
+  const { user } = useLogState()
   const { setReceiverId, setChatRoomId, messages, socket } = useChatRoomState()
   const { showBoundary } = useErrorBoundary()
   const {
@@ -23,10 +25,11 @@ const ChatCompanyCard = ({ chatRoom }) => {
   useEffect(() => {
     getLatestMessage()
     setMessage(latestMessage?.[0])
-    localStorage.user === message?.sender?._id
+    console.log({ message })
+    user?.companyId === message?.sender?._id
       ? setOtherUser(message?.receiver)
       : setOtherUser(message?.sender)
-  }, [getLatestMessage, latestMessage, message, otherUser])
+  }, [getLatestMessage, latestMessage, message, user])
 
   useEffect(() => {
     getLatestMessage()
@@ -46,6 +49,8 @@ const ChatCompanyCard = ({ chatRoom }) => {
 
   const handleClick = (e) => {
     e.preventDefault()
+    console.log({ otherUser })
+    console.log({ chatRoom })
     setReceiverId(otherUser?._id)
     setChatRoomId(chatRoom?._id)
     socket.emit("join_ChatRoom", chatRoom?._id)

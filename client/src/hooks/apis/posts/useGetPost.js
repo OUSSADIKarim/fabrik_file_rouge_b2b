@@ -13,7 +13,6 @@ export const useGetPost = (postId) => {
       const post = await privateApi.get(`/api/posts/${postId}`, {
         headers: { "X-CSRF-Token": csurfToken.data },
       })
-      console.log({ post })
       return post?.data
     },
   })

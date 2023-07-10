@@ -34,8 +34,8 @@ const LoginForm = () => {
     login(credentials, {
       onSuccess: (data) => {
         setLogState(true)
-        localStorage.user = data.company.companyId
-        setUser(data.company.companyId)
+        localStorage.user = JSON.stringify(data.company)
+        setUser(data.company)
         setAccessToken(data.accessToken)
         navigate("/feed")
       },

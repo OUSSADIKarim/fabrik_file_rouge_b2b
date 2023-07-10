@@ -1,5 +1,4 @@
 import useLogState from "../../hooks/contexts/useLogState"
-import Loading from "../Loading"
 import UserNavbar from "./UserNavbar"
 import VisitorNavbar from "./visitorNavbar"
 

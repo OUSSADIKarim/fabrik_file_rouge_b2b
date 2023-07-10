@@ -20,8 +20,32 @@ export const postSchema = new Schema(
       type: String,
       required: true,
     },
+
+    votes: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 )
+
+postSchema.methods.incrementVote = async function () {
+  try {
+    this.votes += 1
+    await this.save()
+    return this.votes
+  } catch (error) {
+    return error
+  }
+}
+postSchema.methods.decrementVote = async function () {
+  try {
+    this.votes -= 1
+    await this.save()
+    return this.votes
+  } catch (error) {
+    return error
+  }
+}
 
 export const Post = mongoose.model("Post", postSchema)

@@ -3,15 +3,26 @@ import { companyIdFromUserType } from "./../utils/companyIdfromUserType.js"
 
 export const getAllPosts = async (req, res, next) => {
   const { page } = req.query
+  const { sortBy, category } = req.query
+  console.log({ sortBy, category })
   const postsPerPage = 20
+  console.log({ page })
   try {
-    const posts = await Post.find()
-      .sort({
-        createdAt: "desc",
-      })
-      .skip(page * postsPerPage)
-      .limit(postsPerPage)
-      .populate("company")
+    const posts = await (category
+      ? Post.find({ category })
+          .sort({
+            createdAt: sortBy,
+          })
+          .skip(page * postsPerPage)
+          .limit(postsPerPage)
+          .populate("company")
+      : Post.find()
+          .sort({
+            createdAt: sortBy,
+          })
+          .skip(page * postsPerPage)
+          .limit(postsPerPage)
+          .populate("company"))
     res.status(200).json(posts)
   } catch (error) {
     next(error)
@@ -62,6 +73,28 @@ export const deletePost = async (req, res, next) => {
   try {
     await Post.findByIdAndDelete(postId)
     res.status(200).json("deleted")
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const incrementVote = async (req, res, next) => {
+  const { postId } = req.params
+  try {
+    const post = await Post.findById(postId)
+    const votes = await post.incrementVote()
+    res.status(200).json({ votes })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const decrementVote = async (req, res, next) => {
+  const { postId } = req.params
+  try {
+    const post = await Post.findById(postId)
+    const votes = await post.decrementVote()
+    res.status(200).json({ votes })
   } catch (error) {
     next(error)
   }

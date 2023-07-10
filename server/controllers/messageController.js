@@ -27,6 +27,7 @@ export const createMassage = async (req, res, next) => {
       receiver: receiverId,
       content: message,
     })
+    console.log({ newMessage })
     await Notification.createMessageNotification(chatRoomId, companyId)
     res.status(200).json(newMessage)
   } catch (error) {
